@@ -1,10 +1,44 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import ThoughtProcess from './ThoughtProcess';
+import { api } from '../../services/api';
 import type { Message } from '../../types';
 
 interface MessageBubbleProps {
   message: Message;
   isStreaming?: boolean;
+}
+
+const CITATION_RE = /\[citation:doc_(\d+):chunk_(\d+)\]/g;
+
+function renderContent(content: string): ReactNode {
+  const parts: ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  const regex = new RegExp(CITATION_RE.source, 'g');
+  while ((match = regex.exec(content)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(content.slice(lastIndex, match.index));
+    }
+    const docId = parseInt(match[1], 10);
+    parts.push(
+      <span
+        key={`citation-${match.index}`}
+        className="inline-flex items-center px-1.5 py-0.5 mx-0.5 text-xs bg-blue-100 text-blue-700 rounded cursor-pointer hover:bg-blue-200 align-bottom"
+        onClick={() => window.open(api.getDocumentFileUrl(docId), '_blank')}
+        title={`查看来源文档`}
+      >
+        来源
+      </span>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < content.length) {
+    parts.push(content.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : content;
 }
 
 export default function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
@@ -44,7 +78,7 @@ export default function MessageBubble({ message, isStreaming }: MessageBubblePro
       {message.content && (
         <div className="p-3 bg-gray-50 rounded-lg border border-gray-100 group">
           <div className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
-            {message.content}
+            {renderContent(message.content)}
             {isStreaming && (
               <span className="inline-block w-2 h-4 bg-gray-600 animate-pulse ml-0.5 align-middle" />
             )}

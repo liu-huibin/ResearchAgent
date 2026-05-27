@@ -99,12 +99,3 @@ async def serve_document_file(
         media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
     return FileResponse(doc.file_path, media_type=media_type, filename=doc.filename)
-
-
-@router.get("/knowledge/list", response_model=list[DocumentResponse])
-async def list_knowledge_documents(db: AsyncSession = Depends(get_session)):
-    from sqlmodel import select as sm_select
-    result = await db.execute(
-        sm_select(Document).where(Document.type == "knowledge")
-    )
-    return result.scalars().all()

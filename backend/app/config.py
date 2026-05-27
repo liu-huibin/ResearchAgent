@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     mysql_host: str = "localhost"
     mysql_port: int = 3306
     mysql_user: str = "root"
-    mysql_password: str = ""
+    mysql_password: str = "123456"
     mysql_database: str = "research_mate"
 
     llm_api_base: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
@@ -17,6 +17,12 @@ class Settings(BaseSettings):
 
     max_upload_size_mb: int = 50
     upload_dir: str = "data/uploads"
+
+    embedding_model: str = "text-embedding-v4"
+    chroma_persist_dir: str = "data/chroma"
+    chunk_size: int = 500
+    chunk_overlap: int = 50
+    retrieval_top_k: int = 5
 
     @property
     def database_url(self) -> str:

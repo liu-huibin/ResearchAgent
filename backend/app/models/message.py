@@ -12,7 +12,7 @@ class Message(SQLModel, table=True):
     role: str = Field(max_length=20)  # user / assistant / tool
     content: Optional[str] = Field(default=None, sa_column=Column(Text))
     thought: Optional[str] = Field(default=None, sa_column=Column(Text))
-    tool_calls: Optional[dict] = Field(default=None, sa_column=Column(JSON))
+    tool_calls: Optional[list] = Field(default=None, sa_column=Column(JSON))
     created_at: datetime = Field(
         sa_column=Column(DateTime, default=func.now(), nullable=False)
     )

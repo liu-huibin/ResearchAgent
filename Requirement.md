@@ -17,7 +17,7 @@
 ---
 
 ## 0. 项目环境
-- 创建conda环境"ResearchAgent"
+- 使用conda环境"ResearchAgent"
 - 大模型接入qwen的API模型
 
 ## 1. 项目概述

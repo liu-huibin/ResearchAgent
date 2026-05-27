@@ -1,5 +1,11 @@
 import SessionList from './SessionList';
-import type { Session } from '../../types';
+import KnowledgeBase from './KnowledgeBase';
+import type { Session, Document } from '../../types';
+
+interface UploadItem {
+  filename: string;
+  progress: number;
+}
 
 interface SidebarProps {
   sessions: Session[];
@@ -9,11 +15,18 @@ interface SidebarProps {
   onCreate: () => void;
   onDelete: (id: number) => void;
   onRename: (id: number, title: string) => void;
+  knowledgeDocs: Document[];
+  knowledgeUploads: UploadItem[];
+  knowledgeLoading: boolean;
+  onKnowledgeUpload: (file: File) => void;
+  onKnowledgeDelete: (docId: number) => void;
 }
 
 export default function Sidebar({
   sessions, activeId, loading,
   onSelect, onCreate, onDelete, onRename,
+  knowledgeDocs, knowledgeUploads, knowledgeLoading,
+  onKnowledgeUpload, onKnowledgeDelete,
 }: SidebarProps) {
   return (
     <div className="flex flex-col h-full">
@@ -40,6 +53,13 @@ export default function Sidebar({
           />
         )}
       </div>
+      <KnowledgeBase
+        documents={knowledgeDocs}
+        uploads={knowledgeUploads}
+        loading={knowledgeLoading}
+        onUpload={onKnowledgeUpload}
+        onDelete={onKnowledgeDelete}
+      />
     </div>
   );
 }

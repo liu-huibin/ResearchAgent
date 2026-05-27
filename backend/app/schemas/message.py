@@ -14,5 +14,5 @@ class MessageResponse(BaseModel):
     role: str
     content: Optional[str] = None
     thought: Optional[str] = None
-    tool_calls: Optional[dict] = None
+    tool_calls: Optional[list] = None
     created_at: datetime

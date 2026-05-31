@@ -7,7 +7,7 @@ from langchain_core.messages import HumanMessage
 from app.config import settings
 from app.services.llm import get_llm
 from app.tools.read_file import read_file
-from app.tools.retrieve_knowledge import retrieve_knowledge
+from app.tools.retrieve_knowledge import hybrid_retrieve
 
 READER_SYSTEM_PROMPT = """你是一位专业的学术论文阅读助手（ReaderAgent）。你的职责是帮助研究人员理解和分析学术论文。
 
@@ -27,7 +27,7 @@ READER_SYSTEM_PROMPT = """你是一位专业的学术论文阅读助手（Reader
 
 ## 工具使用
 - 你可以使用 `read_file` 工具来读取文档文件的内容。如果需要阅读当前会话的文档，请使用该工具。
-- 你可以使用 `retrieve_knowledge` 工具来搜索知识库中已上传的文档。当用户的问题涉及已阅读文档之外的知识，或用户明确要求搜索知识库时，请主动调用此工具。
+- 你可以使用 `hybrid_retrieve` 工具来搜索知识库中已上传的文档。该工具采用混合检索（语义搜索 + BM25 关键词搜索 + Rerank 精排），检索效果更精准。当用户的问题涉及已阅读文档之外的知识，或用户明确要求搜索知识库时，请主动调用此工具。
 - 在回答中引用知识库内容时，请保留返回结果中的 [citation:doc_X:chunk_Y] 引用标记，不要移除它们。
 - 如果没有文档可读，直接基于用户提供的信息进行回答。
 """
@@ -35,7 +35,7 @@ READER_SYSTEM_PROMPT = """你是一位专业的学术论文阅读助手（Reader
 
 def _get_agent():
     llm = get_llm()
-    tools = [read_file, retrieve_knowledge]
+    tools = [read_file, hybrid_retrieve]
     return create_react_agent(
         model=llm,
         tools=tools,

@@ -10,6 +10,15 @@ from app.routers import sessions, documents, messages, knowledge
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    # Sync BM25 index from existing Chroma data (for Phase 2 → Phase 3 migration)
+    try:
+        from app.services.bm25_index import sync_from_chroma
+        count = sync_from_chroma("knowledge_base")
+        if count > 0:
+            import logging
+            logging.getLogger("uvicorn").info(f"BM25 index synced: {count} chunks indexed")
+    except Exception:
+        pass
     yield
 
 

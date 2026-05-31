@@ -13,6 +13,8 @@ from app.schemas.document import DocumentResponse
 from app.services.chunking import chunk_document
 from app.services.embedding import embed_documents
 from app.services.file_parser import extract_text_from_file
+from app.services.bm25_index import add_to_index as add_to_bm25
+from app.services.bm25_index import remove_from_index as remove_from_bm25
 from app.services.vectordb import delete_document as delete_vectordb_doc
 from app.services.vectordb import index_document
 
@@ -80,6 +82,10 @@ async def upload_knowledge(
             chunk_texts = [c["content"] for c in chunks]
             embeddings = embed_documents(chunk_texts)
             index_document(chunks, embeddings)
+            try:
+                add_to_bm25("knowledge_base", chunks)
+            except Exception:
+                pass  # BM25 index build failure should not block upload
     except HTTPException:
         raise
     except Exception as e:
@@ -106,6 +112,11 @@ async def remove_knowledge(
 
     try:
         delete_vectordb_doc(doc_id)
+    except Exception:
+        pass
+
+    try:
+        remove_from_bm25("knowledge_base", doc_id)
     except Exception:
         pass
 

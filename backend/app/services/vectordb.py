@@ -46,6 +46,10 @@ def delete_document(doc_id: int) -> None:
         pass
 
 
+def get_collection() -> Collection:
+    return _get_collection()
+
+
 def search(query_embedding: list[float], top_k: int = 5) -> list[dict]:
     collection = _get_collection()
     if collection.count() == 0:

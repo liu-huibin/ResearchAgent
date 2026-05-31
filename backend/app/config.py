@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     chunk_size: int = 500
     chunk_overlap: int = 50
     retrieval_top_k: int = 5
+    hybrid_semantic_top_k: int = 20
+    hybrid_bm25_top_k: int = 20
+    hybrid_final_top_k: int = 5
+    bm25_persist_dir: str = "data/bm25"
+    rerank_model: str = ""  # empty = use embedding cosine similarity for rerank
+    rerank_api_url: str = ""  # optional: dedicated rerank API endpoint
 
     @property
     def database_url(self) -> str:

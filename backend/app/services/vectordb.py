@@ -1,9 +1,12 @@
+import logging
 from typing import Optional
 
 import chromadb
 from chromadb.api import Collection
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 _client: Optional[chromadb.PersistentClient] = None
 _collection: Optional[Collection] = None
@@ -34,6 +37,7 @@ def index_document(chunks: list[dict], embeddings: list[list[float]]) -> None:
         metadatas.append(chunk["metadata"])
 
     collection.add(ids=ids, embeddings=embeddings, documents=documents, metadatas=metadatas)
+    logger.info("Vectordb indexed %d chunks (doc_id=%s)", len(chunks), chunks[0]["metadata"]["document_id"] if chunks else "none")
 
 
 def delete_document(doc_id: int) -> None:
@@ -42,8 +46,9 @@ def delete_document(doc_id: int) -> None:
         results = collection.get(where={"document_id": doc_id})
         if results["ids"]:
             collection.delete(ids=results["ids"])
+            logger.info("Vectordb deleted %d chunks for doc_id=%d", len(results["ids"]), doc_id)
     except Exception:
-        pass
+        logger.warning("Vectordb delete failed for doc_id=%d", doc_id, exc_info=True)
 
 
 def get_collection() -> Collection:
@@ -53,6 +58,7 @@ def get_collection() -> Collection:
 def search(query_embedding: list[float], top_k: int = 5) -> list[dict]:
     collection = _get_collection()
     if collection.count() == 0:
+        logger.debug("Vectordb search skipped: collection is empty")
         return []
     results = collection.query(query_embeddings=[query_embedding], n_results=top_k)
     formatted = []
@@ -64,4 +70,5 @@ def search(query_embedding: list[float], top_k: int = 5) -> list[dict]:
                 "metadata": results["metadatas"][0][i] if results["metadatas"] else {},
                 "distance": results["distances"][0][i] if results["distances"] else 0.0,
             })
+    logger.debug("Vectordb search: top_k=%d, returned=%d", top_k, len(formatted))
     return formatted

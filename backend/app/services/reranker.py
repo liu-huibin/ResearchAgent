@@ -3,9 +3,12 @@
 Uses embedding cosine similarity as the default rerank strategy.
 If rerank_model is configured, uses that cross-encoder model instead.
 """
+import logging
 
 from app.config import settings
 from app.services.embedding import embed_query, embed_documents
+
+logger = logging.getLogger(__name__)
 
 
 def rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
@@ -23,8 +26,10 @@ def rerank(query: str, candidates: list[dict], top_k: int = 5) -> list[dict]:
         return []
 
     if settings.rerank_model:
+        logger.debug("Rerank using cross-encoder model=%s, candidates=%d", settings.rerank_model, len(candidates))
         return _cross_encoder_rerank(query, candidates, top_k)
 
+    logger.debug("Rerank using embedding cosine similarity, candidates=%d", len(candidates))
     return _embedding_rerank(query, candidates, top_k)
 
 

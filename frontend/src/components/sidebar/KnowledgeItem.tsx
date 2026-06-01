@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api } from '../../services/api';
+import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
 import type { Document } from '../../types';
 
 interface KnowledgeItemProps {
@@ -10,12 +11,19 @@ interface KnowledgeItemProps {
 
 export default function KnowledgeItem({ document: doc, uploadProgress, onDelete }: KnowledgeItemProps) {
   const [showConfirm, setShowConfirm] = useState(false);
+  const { openTab } = useDocumentTabs();
 
   const ext = doc.filename.split('.').pop()?.toLowerCase();
   const isPdf = ext === 'pdf';
 
   const handleOpen = () => {
-    window.open(api.getDocumentFileUrl(doc.id), '_blank');
+    openTab({
+      documentId: doc.id,
+      filename: doc.filename,
+      fileUrl: api.getDocumentFileUrl(doc.id),
+      isPdf: ext === 'pdf',
+      label: doc.filename.length > 20 ? doc.filename.slice(0, 20) + '...' : doc.filename,
+    });
   };
 
   return (

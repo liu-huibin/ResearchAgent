@@ -1,4 +1,7 @@
 import MessageBubble from './MessageBubble';
+import MarkdownRenderer from './MarkdownRenderer';
+import { api } from '../../services/api';
+import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
 import type { Message } from '../../types';
 
 interface StreamingMessage {
@@ -15,6 +18,17 @@ interface MessageListProps {
 }
 
 export default function MessageList({ messages, streaming, error }: MessageListProps) {
+  const { openTab } = useDocumentTabs();
+
+  const handleCitationClick = (docId: number) => {
+    openTab({
+      documentId: docId,
+      filename: `文档 ${docId}`,
+      fileUrl: api.getDocumentFileUrl(docId),
+      isPdf: true,
+      label: `文档 ${docId}`,
+    });
+  };
   return (
     <div className="px-3 py-2 space-y-3">
       {messages.map((msg) => (
@@ -40,10 +54,8 @@ export default function MessageList({ messages, streaming, error }: MessageListP
           )}
           {streaming.content && (
             <div className="p-3 bg-gray-50 rounded-lg border border-gray-100">
-              <div className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
-                {streaming.content}
-                {!streaming.done && <span className="inline-block w-2 h-4 bg-gray-600 animate-pulse ml-0.5 align-middle" />}
-              </div>
+              <MarkdownRenderer content={streaming.content} onCitationClick={handleCitationClick} />
+              {!streaming.done && <span className="inline-block w-2 h-4 bg-gray-600 animate-pulse ml-0.5 align-middle" />}
             </div>
           )}
         </div>

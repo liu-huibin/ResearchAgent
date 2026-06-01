@@ -1,12 +1,17 @@
+import logging
+
 from langchain_openai import ChatOpenAI
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 def get_llm() -> ChatOpenAI:
     kwargs = {}
     if settings.llm_api_key:
         kwargs["api_key"] = settings.llm_api_key
+    logger.debug("Creating LLM: model=%s, base_url=%s", settings.llm_model_name, settings.llm_api_base)
     return ChatOpenAI(
         base_url=settings.llm_api_base,
         model=settings.llm_model_name,

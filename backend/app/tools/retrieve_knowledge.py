@@ -1,33 +1,47 @@
+import logging
+
 from langchain_core.tools import tool
 
 from app.config import settings
 from app.services.hybrid_search import hybrid_search
 
+logger = logging.getLogger(__name__)
+
 
 @tool
 def hybrid_retrieve(query: str, top_k: int = 5) -> str:
-    """Search the knowledge base using hybrid retrieval (semantic + BM25 + rerank).
+    """PRIMARY TOOL: Search the knowledge base using hybrid retrieval (semantic + BM25 + rerank).
 
-    This tool combines semantic vector search and keyword-based BM25 search,
-    then reranks the merged results for optimal relevance.
+    This is the DEFAULT tool for answering research questions. You MUST call this tool
+    first before attempting to answer ANY question that involves academic/research content.
 
-    Use this tool when the user asks about content that might be in the
-    knowledge base, or when they reference specific uploaded documents.
+    Always search the knowledge base when the user:
+    - Mentions any research topic, paper, study, method, experiment, or finding
+    - Uses keywords: 搜索, 查找, 检索, 知识库, 文档, 论文, 研究, 有没有, 是否有
+    - Asks "find", "search", "lookup", or "what do the documents say about..."
+    - Asks any question that might be answered by uploaded documents
+
+    Even if you think you know the answer, search the knowledge base first to provide
+    accurate, sourced information from the user's uploaded documents.
 
     Args:
-        query: A natural language search query describing what to find.
-        top_k: Number of results to return (1-10, default 5).
+        query: A descriptive search query in Chinese or English. Make it specific.
+        top_k: Number of results (1-10, default 5).
 
     Returns:
         Formatted hybrid retrieval results with source citations.
     """
     top_k = max(1, min(top_k, 10))
+    logger.info("hybrid_retrieve called: query=%s, top_k=%d", query[:100], top_k)
     try:
         results = hybrid_search(query, top_k=top_k)
     except Exception as e:
+        logger.exception("hybrid_retrieve failed for query=%s", query[:100])
         return f"混合检索失败: {str(e)}"
 
+    logger.info("hybrid_retrieve results: %d chunks found for query=%s", len(results), query[:100])
     if not results:
+        logger.warning("hybrid_retrieve: no results for query=%s", query[:100])
         return f'知识库中未找到与"{query}"相关的内容。'
 
     parts = []

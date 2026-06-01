@@ -12,6 +12,7 @@ interface PDFViewerProps {
 export default function PDFViewer({ fileUrl }: PDFViewerProps) {
   const [numPages, setNumPages] = useState(0);
   const [scale, setScale] = useState(1.2);
+  const [loadError, setLoadError] = useState(false);
 
   return (
     <div className="flex flex-col items-center p-2">
@@ -38,8 +39,9 @@ export default function PDFViewer({ fileUrl }: PDFViewerProps) {
       <Document
         file={fileUrl}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+        onLoadError={() => setLoadError(true)}
         loading={<div className="text-gray-400 text-sm p-4">加载 PDF 中...</div>}
-        error={<div className="text-red-400 text-sm p-4">PDF 加载失败</div>}
+        error={<div className="text-red-400 text-sm p-4">{loadError ? '找不到该文档，可能被删除' : 'PDF 加载失败'}</div>}
       >
         {Array.from({ length: numPages }, (_, i) => (
           <div key={`page_${i + 1}`} className="mb-3 shadow-md">

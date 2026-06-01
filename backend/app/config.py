@@ -30,6 +30,9 @@ class Settings(BaseSettings):
     rerank_model: str = ""  # empty = use embedding cosine similarity for rerank
     rerank_api_url: str = ""  # optional: dedicated rerank API endpoint
 
+    log_level: str = "INFO"
+    log_dir: str = "log"
+
     @property
     def database_url(self) -> str:
         return (

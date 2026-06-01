@@ -1,0 +1,71 @@
+2026-06-01 16:04:29 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=805, path=data/bm25\knowledge_base.pkl
+2026-06-01 16:04:29 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 805 chunks indexed
+2026-06-01 16:04:29 | INFO     | app.main                 | BM25 index synced: 805 chunks indexed
+2026-06-01 16:11:05 | INFO     | app.routers.messages     | Message received: session_id=7, content_len=22
+2026-06-01 16:11:05 | INFO     | app.routers.messages     | Extracting document text for session 7: doc_id=24
+2026-06-01 16:11:05 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\7\9f59ff3c0ff045168546743a31a093d2.pdf, ext=.pdf
+2026-06-01 16:11:09 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 87392)
+2026-06-01 16:11:09 | INFO     | app.routers.messages     | SSE stream started for session 7
+2026-06-01 16:11:10 | INFO     | app.services.agent       | Agent run started: msg_len=22, has_doc=True
+2026-06-01 16:11:11 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=CodeBERT 模型 论文, top_k=5
+2026-06-01 16:11:11 | INFO     | app.services.agent       | Tool start: hybrid_retrieve, input={'query': 'CodeBERT 模型 论文'}
+2026-06-01 16:11:12 | INFO     | app.services.hybrid_search | Hybrid search: query=CodeBERT 模型 论文, semantic=20, bm25=20, merged=29
+2026-06-01 16:11:14 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
+2026-06-01 16:11:14 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=CodeBERT 模型 论文
+2026-06-01 16:11:14 | INFO     | app.services.agent       | Tool end: hybrid_retrieve, output_len=2981
+2026-06-01 16:11:24 | INFO     | app.routers.messages     | SSE stream completed for session 7, message_id=34
+2026-06-01 16:37:04 | ERROR    | sqlalchemy.pool.impl.AsyncAdaptedQueuePool | Exception terminating connection <AdaptedConnection <aiomysql.connection.Connection object at 0x0000026A37D0BD40>>
+Traceback (most recent call last):
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\pool\base.py", line 373, in _close_connection
+    self._dialect.do_terminate(connection)
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 218, in do_terminate
+    dbapi_connection.terminate()
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\connectors\asyncio.py", line 398, in terminate
+    if in_greenlet():
+       ^^^^^^^^^^^^^
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 105, in in_greenlet
+    current = getcurrent()
+              ^^^^^^^^^^^^
+RuntimeError: greenlet is being finalized
+2026-06-01 16:37:04 | ERROR    | sqlalchemy.pool.impl.AsyncAdaptedQueuePool | The garbage collector is trying to clean up non-checked-in connection <AdaptedConnection <aiomysql.connection.Connection object at 0x0000026A37D0BD40>>, which will be terminated.  Please ensure that SQLAlchemy pooled connections are returned to the pool explicitly, either by calling ``close()`` or by using appropriate context managers to manage their lifecycle.
+2026-06-01 16:37:12 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=805, path=data/bm25\knowledge_base.pkl
+2026-06-01 16:37:12 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 805 chunks indexed
+2026-06-01 16:37:12 | INFO     | app.main                 | BM25 index synced: 805 chunks indexed
+2026-06-01 16:42:25 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=805, path=data/bm25\knowledge_base.pkl
+2026-06-01 16:42:25 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 805 chunks indexed
+2026-06-01 16:42:25 | INFO     | app.main                 | BM25 index synced: 805 chunks indexed
+2026-06-01 16:42:54 | INFO     | app.routers.knowledge    | Knowledge upload: file=反网络钓鱼：全面的视角.pdf, size=3.65MB, md5=5414170edfc38a3ee5da03af5e035748
+2026-06-01 16:42:54 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\knowledge\4db29a69c671487ebb0743afae2b518b.pdf, ext=.pdf
+2026-06-01 16:42:54 | INFO     | app.services.file_parser | Text extracted: 228214 chars (truncated from 228214)
+2026-06-01 16:42:54 | INFO     | app.services.chunking    | Chunking: file=反网络钓鱼：全面的视角.pdf, doc_id=25, text_len=228214, chunks=504
+2026-06-01 16:42:54 | INFO     | app.routers.knowledge    | Generating embeddings for 504 chunks
+2026-06-01 16:43:23 | INFO     | app.services.vectordb    | Vectordb indexed 504 chunks (doc_id=25)
+2026-06-01 16:43:24 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1309, path=data/bm25\knowledge_base.pkl
+2026-06-01 16:43:24 | INFO     | app.routers.knowledge    | Knowledge upload complete: doc_id=25, chunks=504
+2026-06-01 16:48:13 | INFO     | app.routers.messages     | Message received: session_id=2, content_len=23
+2026-06-01 16:48:13 | INFO     | app.routers.messages     | Extracting document text for session 2: doc_id=6
+2026-06-01 16:48:13 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\2\ec3f8fb265694cf4a4dcbf0fa2c26148.pdf, ext=.pdf
+2026-06-01 16:48:13 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 51046)
+2026-06-01 16:48:13 | INFO     | app.routers.messages     | SSE stream started for session 2
+2026-06-01 16:48:13 | INFO     | app.services.agent       | Agent run started: msg_len=23, has_doc=True
+2026-06-01 16:48:15 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=Code BERT 模型 论文, top_k=5
+2026-06-01 16:48:15 | INFO     | app.services.agent       | Tool start: hybrid_retrieve, input={'query': 'Code BERT 模型 论文'}
+2026-06-01 16:48:15 | INFO     | app.services.hybrid_search | Hybrid search: query=Code BERT 模型 论文, semantic=20, bm25=20, merged=34
+2026-06-01 16:48:17 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
+2026-06-01 16:48:17 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=Code BERT 模型 论文
+2026-06-01 16:48:17 | INFO     | app.services.agent       | Tool end: hybrid_retrieve, output_len=2994
+2026-06-01 16:48:28 | INFO     | app.routers.messages     | SSE stream completed for session 2, message_id=36
+2026-06-01 16:49:30 | ERROR    | sqlalchemy.pool.impl.AsyncAdaptedQueuePool | Exception terminating connection <AdaptedConnection <aiomysql.connection.Connection object at 0x000001A976E322D0>>
+Traceback (most recent call last):
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\pool\base.py", line 373, in _close_connection
+    self._dialect.do_terminate(connection)
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 218, in do_terminate
+    dbapi_connection.terminate()
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\connectors\asyncio.py", line 398, in terminate
+    if in_greenlet():
+       ^^^^^^^^^^^^^
+  File "C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 105, in in_greenlet
+    current = getcurrent()
+              ^^^^^^^^^^^^
+RuntimeError: greenlet is being finalized
+2026-06-01 16:49:30 | ERROR    | sqlalchemy.pool.impl.AsyncAdaptedQueuePool | The garbage collector is trying to clean up non-checked-in connection <AdaptedConnection <aiomysql.connection.Connection object at 0x000001A976E322D0>>, which will be terminated.  Please ensure that SQLAlchemy pooled connections are returned to the pool explicitly, either by calling ``close()`` or by using appropriate context managers to manage their lifecycle.

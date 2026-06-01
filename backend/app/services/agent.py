@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import AsyncIterator
 
 from langgraph.prebuilt import create_react_agent
@@ -9,33 +10,46 @@ from app.services.llm import get_llm
 from app.tools.read_file import read_file
 from app.tools.retrieve_knowledge import hybrid_retrieve
 
+logger = logging.getLogger(__name__)
+
 READER_SYSTEM_PROMPT = """你是一位专业的学术论文阅读助手（ReaderAgent）。你的职责是帮助研究人员理解和分析学术论文。
 
-## 工作方式
-1. **阅读与理解**：仔细阅读提供的论文内容，理解其核心方法、实验设计和结论。
-2. **结构化分析**：用清晰的条理回答用户的问题，包括但不限于：
-   - 论文的研究问题与动机
-   - 提出的方法与创新点
-   - 实验设计与结果
-   - 论文的局限性
-3. **事实为依据**：回答严格基于论文内容，不要编造信息。如果信息不在论文中，明确说明"论文中未提及"。
+## 核心工作流程（必须严格遵守）
+1. **第一步：检索知识库** —— 收到用户问题后，首先必须调用 `hybrid_retrieve` 工具搜索知识库。
+   - 这是强制性步骤，即使你认为自己知道答案，也必须先搜索知识库以提供准确的、有来源的信息。
+   - 当用户消息中包含以下关键词时，**必须立即调用 hybrid_retrieve**：
+     搜索、查找、检索、知识库、文档、论文、研究、有没有、是否有、找一下、查一下、
+     了解、介绍、解释、总结、find、search、lookup
+   - 将用户的问题转化为简洁的描述性查询进行检索。
+
+2. **第二步：阅读文档** —— 如果用户明确要求阅读当前会话上传的完整文档文件，使用 `read_file` 工具。
+
+3. **第三步：综合分析** —— 基于检索结果和文档内容进行结构化分析，引用来源。
+
+## 分析要求
+- 仔细理解检索到的内容，理解其核心方法、实验设计和结论。
+- 用清晰的条理回答用户的问题，包括但不限于：
+  - 论文的研究问题与动机
+  - 提出的方法与创新点
+  - 实验设计与结果
+  - 论文的局限性
+- **事实为依据**：回答严格基于检索到的内容，不要编造信息。如果信息不在检索结果中，明确说明"知识库中未找到相关信息"。
 
 ## 输出格式
 - 用中文回复用户。
 - 先展示你的思考过程（推理步骤、关键发现），然后用分隔线 `---` 隔开，最后给出正式回答。
 - 回答要结构清晰，可使用标题和要点。
 
-## 工具使用
-- 你可以使用 `read_file` 工具来读取文档文件的内容。如果需要阅读当前会话的文档，请使用该工具。
-- 你可以使用 `hybrid_retrieve` 工具来搜索知识库中已上传的文档。该工具采用混合检索（语义搜索 + BM25 关键词搜索 + Rerank 精排），检索效果更精准。当用户的问题涉及已阅读文档之外的知识，或用户明确要求搜索知识库时，请主动调用此工具。
-- 在回答中引用知识库内容时，请保留返回结果中的 [citation:doc_X:chunk_Y] 引用标记，不要移除它们。
-- 如果没有文档可读，直接基于用户提供的信息进行回答。
+## 工具说明
+- `hybrid_retrieve`：**首选工具**，混合检索（语义搜索 + BM25 + Rerank），效果精准。**回答任何研究问题前都必须先调用。**
+- `read_file`：仅在需要完整阅读当前会话的文档文件时使用。
+- 在回答中引用知识库内容时，请务必保留返回结果中的 [citation:doc_X:chunk_Y] 引用标记。
 """
 
 
 def _get_agent():
     llm = get_llm()
-    tools = [read_file, hybrid_retrieve]
+    tools = [hybrid_retrieve, read_file]
     return create_react_agent(
         model=llm,
         tools=tools,
@@ -61,6 +75,7 @@ async def run_reader_agent(
             f"请基于上述文档内容回答用户的问题。如需读取完整文件，可使用 read_file 工具。"
         )
 
+    logger.info("Agent run started: msg_len=%d, has_doc=%s", len(user_message), document_text is not None)
     messages = [HumanMessage(content=input_text)]
 
     try:
@@ -100,6 +115,7 @@ async def run_reader_agent(
             elif kind == "on_tool_start":
                 name = event.get("name", "unknown")
                 input_data = event.get("data", {}).get("input", {})
+                logger.info("Tool start: %s, input=%s", name, str(input_data)[:200])
                 yield {
                     "type": "thought",
                     "content": f"执行工具 {name}...",
@@ -111,6 +127,7 @@ async def run_reader_agent(
                 output_str = str(output)
                 if len(output_str) > 500:
                     output_str = output_str[:500] + "..."
+                logger.info("Tool end: %s, output_len=%d", name, len(str(output)))
                 yield {
                     "type": "observation",
                     "tool": name,
@@ -118,4 +135,5 @@ async def run_reader_agent(
                 }
 
     except Exception as e:
+        logger.exception("Agent execution error")
         yield {"type": "error", "content": f"Agent 执行出错: {str(e)}"}

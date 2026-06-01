@@ -1,7 +1,10 @@
+import logging
+
 from openai import OpenAI
 
 from app.config import settings
 
+logger = logging.getLogger(__name__)
 EMBEDDING_BATCH_SIZE = 10
 
 
@@ -18,6 +21,7 @@ def _get_client() -> OpenAI:
 def embed_documents(texts: list[str]) -> list[list[float]]:
     client = _get_client()
     all_embeddings = []
+    logger.debug("Embedding %d texts with model=%s, batch_size=%d", len(texts), settings.embedding_model, EMBEDDING_BATCH_SIZE)
     for i in range(0, len(texts), EMBEDDING_BATCH_SIZE):
         batch = texts[i : i + EMBEDDING_BATCH_SIZE]
         resp = client.embeddings.create(
@@ -25,6 +29,7 @@ def embed_documents(texts: list[str]) -> list[list[float]]:
             input=batch,
         )
         all_embeddings.extend(d.embedding for d in resp.data)
+    logger.debug("Embedding complete: %d vectors generated", len(all_embeddings))
     return all_embeddings
 
 

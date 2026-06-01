@@ -1,6 +1,10 @@
+import logging
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 def chunk_document(text: str, filename: str, doc_id: int) -> list[dict]:
@@ -11,6 +15,7 @@ def chunk_document(text: str, filename: str, doc_id: int) -> list[dict]:
         length_function=len,
     )
     chunks = splitter.split_text(text)
+    logger.info("Chunking: file=%s, doc_id=%d, text_len=%d, chunks=%d", filename, doc_id, len(text), len(chunks))
     return [
         {
             "content": chunk,

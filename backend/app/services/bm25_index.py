@@ -1,3 +1,4 @@
+import logging
 import os
 import pickle
 
@@ -5,6 +6,8 @@ import jieba
 from rank_bm25 import BM25Okapi
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 _INDEX_CACHE: dict[str, dict] = {}  # keyed by index name
 
@@ -63,12 +66,14 @@ def build_index(name: str, chunks: list[dict]) -> None:
         }, f)
 
     _INDEX_CACHE[name] = {"bm25": bm25, "metadatas": metadatas, "corpus": corpus}
+    logger.info("BM25 index built: name=%s, chunks=%d, path=%s", name, len(chunks), path)
 
 
 def search_bm25(query: str, top_k: int = 20, name: str = "knowledge_base") -> list[dict]:
     """Search BM25 index and return top_k results with metadata and content."""
     entry = _get_or_load_index(name)
     if entry is None:
+        logger.debug("BM25 search skipped: index '%s' not found", name)
         return []
 
     bm25, metadatas, corpus = entry
@@ -91,6 +96,7 @@ def search_bm25(query: str, top_k: int = 20, name: str = "knowledge_base") -> li
             "metadata": meta,
             "score": float(scores[idx]),
         })
+    logger.debug("BM25 search: query=%s, returned=%d", query[:80], len(results))
     return results
 
 
@@ -166,6 +172,7 @@ def sync_from_chroma(collection_name: str = "knowledge_base") -> int:
     if chunks:
         build_index(collection_name, chunks)
 
+    logger.info("BM25 sync from Chroma complete: %d chunks indexed", len(chunks))
     return len(chunks)
 
 

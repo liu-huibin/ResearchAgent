@@ -14,7 +14,12 @@ export default function WordViewer({ fileUrl }: WordViewerProps) {
     setLoading(true);
     setError('');
     fetch(fileUrl)
-      .then((res) => res.arrayBuffer())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(res.status === 404 ? 'NOT_FOUND' : 'LOAD_ERROR');
+        }
+        return res.arrayBuffer();
+      })
       .then((buffer) =>
         mammoth.convertToHtml({ arrayBuffer: buffer })
       )
@@ -22,8 +27,8 @@ export default function WordViewer({ fileUrl }: WordViewerProps) {
         setHtml(result.value);
         setLoading(false);
       })
-      .catch(() => {
-        setError('Word 文档加载失败');
+      .catch((err) => {
+        setError(err.message === 'NOT_FOUND' ? '找不到该文档，可能被删除' : 'Word 文档加载失败');
         setLoading(false);
       });
   }, [fileUrl]);

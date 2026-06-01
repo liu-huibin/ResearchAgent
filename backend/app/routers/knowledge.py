@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import os
 import uuid
 
@@ -18,6 +19,7 @@ from app.services.bm25_index import remove_from_index as remove_from_bm25
 from app.services.vectordb import delete_document as delete_vectordb_doc
 from app.services.vectordb import index_document
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/knowledge", tags=["knowledge"])
 
 ALLOWED_EXTENSIONS = {".pdf", ".doc", ".docx"}
@@ -41,6 +43,7 @@ async def upload_knowledge(
         )
 
     file_md5 = hashlib.md5(content).hexdigest()
+    logger.info("Knowledge upload: file=%s, size=%.2fMB, md5=%s", file.filename, file_size_mb, file_md5)
 
     result = await db.execute(
         sm_select(Document).where(
@@ -49,6 +52,7 @@ async def upload_knowledge(
         )
     )
     if result.scalars().first():
+        logger.warning("Duplicate knowledge file rejected: %s", file.filename)
         raise HTTPException(status_code=409, detail="文件已存在于知识库中")
 
     user_dir = os.path.join(settings.upload_dir, "1", "knowledge")
@@ -80,15 +84,18 @@ async def upload_knowledge(
         chunks = chunk_document(text, filename=document.filename, doc_id=document.id)
         if chunks:
             chunk_texts = [c["content"] for c in chunks]
+            logger.info("Generating embeddings for %d chunks", len(chunks))
             embeddings = embed_documents(chunk_texts)
             index_document(chunks, embeddings)
             try:
                 add_to_bm25("knowledge_base", chunks)
             except Exception:
-                pass  # BM25 index build failure should not block upload
+                logger.warning("BM25 index build failed for knowledge upload, doc_id=%d", document.id, exc_info=True)
+        logger.info("Knowledge upload complete: doc_id=%d, chunks=%d", document.id, len(chunks))
     except HTTPException:
         raise
     except Exception as e:
+        logger.exception("Document processing failed for knowledge upload: %s", file.filename)
         await db.delete(document)
         await db.commit()
         if os.path.exists(file_path):
@@ -107,21 +114,24 @@ async def remove_knowledge(
     if not doc or doc.type != "knowledge":
         raise HTTPException(status_code=404, detail="知识库文档不存在")
 
+    logger.info("Knowledge doc deleting: doc_id=%d, file=%s", doc_id, doc.filename)
+
     if os.path.exists(doc.file_path):
         os.remove(doc.file_path)
 
     try:
         delete_vectordb_doc(doc_id)
     except Exception:
-        pass
+        logger.warning("Vectordb delete failed during knowledge remove: doc_id=%d", doc_id, exc_info=True)
 
     try:
         remove_from_bm25("knowledge_base", doc_id)
     except Exception:
-        pass
+        logger.warning("BM25 remove failed during knowledge remove: doc_id=%d", doc_id, exc_info=True)
 
     await db.delete(doc)
     await db.commit()
+    logger.info("Knowledge doc deleted: doc_id=%d", doc_id)
 
 
 @router.get("/list", response_model=list[DocumentResponse])

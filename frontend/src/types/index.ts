@@ -37,3 +37,12 @@ export interface SSEMessageEvent {
   output?: string;
   message_id?: number;
 }
+
+export interface DocumentTab {
+  id: string;
+  documentId: number;
+  filename: string;
+  fileUrl: string;
+  isPdf: boolean;
+  label: string;
+}

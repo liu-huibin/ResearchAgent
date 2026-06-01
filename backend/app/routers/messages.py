@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
@@ -15,6 +16,7 @@ from app.services.agent import run_reader_agent
 from app.services.file_parser import extract_text_from_file
 from app.config import settings
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/sessions", tags=["messages"])
 
 
@@ -41,6 +43,8 @@ async def send_message(
     if not session:
         raise HTTPException(status_code=404, detail="会话不存在")
 
+    logger.info("Message received: session_id=%d, content_len=%d", session_id, len(body.content))
+
     # Save user message
     user_msg = Message(session_id=session_id, role="user", content=body.content)
     db.add(user_msg)
@@ -52,14 +56,17 @@ async def send_message(
         doc = await db.get(Document, session.active_document_id)
         if doc:
             try:
+                logger.info("Extracting document text for session %d: doc_id=%d", session_id, doc.id)
                 doc_text = extract_text_from_file(doc.file_path)
             except Exception:
+                logger.warning("Failed to extract text for doc_id=%d", session.active_document_id, exc_info=True)
                 doc_text = None
 
     async def generate_sse():
         thought_parts: list[str] = []
         content_parts: list[str] = []
         tool_calls_log: list[dict] = []
+        logger.info("SSE stream started for session %d", session_id)
 
         try:
             async for event in run_reader_agent(
@@ -84,6 +91,7 @@ async def send_message(
                     yield f"event: token\ndata: {json.dumps({'content': event['content']}, ensure_ascii=False)}\n\n"
 
                 elif event_type == "error":
+                    logger.error("SSE error for session %d: %s", session_id, event.get("content", ""))
                     yield f"event: error\ndata: {json.dumps({'content': event['content']}, ensure_ascii=False)}\n\n"
                     # Save partial response on error
                     assistant_msg = Message(
@@ -111,8 +119,10 @@ async def send_message(
             await db.refresh(assistant_msg)
 
             yield f"event: done\ndata: {json.dumps({'message_id': assistant_msg.id}, ensure_ascii=False)}\n\n"
+            logger.info("SSE stream completed for session %d, message_id=%d", session_id, assistant_msg.id)
 
         except asyncio.CancelledError:
+            logger.info("SSE stream cancelled for session %d", session_id)
             # Client disconnected, save partial
             if content_parts:
                 assistant_msg = Message(

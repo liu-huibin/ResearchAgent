@@ -1,10 +1,15 @@
 from contextlib import asynccontextmanager
+import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.logging_config import setup_logging
 from app.database import init_db
 from app.routers import sessions, documents, messages, knowledge
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
@@ -15,8 +20,7 @@ async def lifespan(app: FastAPI):
         from app.services.bm25_index import sync_from_chroma
         count = sync_from_chroma("knowledge_base")
         if count > 0:
-            import logging
-            logging.getLogger("uvicorn").info(f"BM25 index synced: {count} chunks indexed")
+            logger.info("BM25 index synced: %d chunks indexed", count)
     except Exception:
         pass
     yield

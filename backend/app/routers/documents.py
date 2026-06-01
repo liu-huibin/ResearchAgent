@@ -1,4 +1,5 @@
 import hashlib
+import logging
 import os
 import uuid
 
@@ -12,6 +13,7 @@ from app.models.session import Session
 from app.schemas.document import DocumentResponse
 from app.config import settings
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["documents"])
 
 ALLOWED_EXTENSIONS = {".pdf", ".doc", ".docx"}
@@ -44,6 +46,7 @@ async def upload_session_document(
         )
 
     file_md5 = compute_md5(content)
+    logger.info("Session document upload: session=%d, file=%s, size=%.2fMB", session_id, file.filename, file_size_mb)
 
     user_dir = os.path.join(settings.upload_dir, "1", "sessions", str(session_id))
     os.makedirs(user_dir, exist_ok=True)

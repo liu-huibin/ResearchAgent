@@ -43,5 +43,16 @@ def setup_logging():
     file_handler.setFormatter(formatter)
     root_logger.addHandler(file_handler)
 
-    for noisy in ("chromadb", "urllib3", "httpx", "openai", "httpcore", "asyncio"):
+    for noisy in (
+        "chromadb",
+        "urllib3",
+        "httpx",
+        "openai",
+        "httpcore",
+        "asyncio",
+        # Uvicorn's reload watcher reports every cache/log/data write as an
+        # INFO-level "changes detected" message. Actual reload failures still
+        # surface through the uvicorn error logger.
+        "watchfiles",
+    ):
         logging.getLogger(noisy).setLevel(logging.WARNING)

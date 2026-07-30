@@ -48,3 +48,19 @@
 2026-07-30 20:31:32 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 33546, "llm_calls_failed": 0, "llm_latency_ms": 5880, "models": ["qwen-plus"], "output_tokens": 187, "total_tokens": 33733}, "Supervisor": {"input_tokens": 132, "llm_calls_failed": 0, "llm_latency_ms": 3644, "models": ["qwen-plus"], "output_tokens": 192, "total_tokens": 324}}, "duration_ms": 18135, "input_tokens": 33678, "iterations": 3, "langsmith_enabled": false, "output_tokens": 379, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 19, "status": "completed", "tool_calls": 4, "tool_failures": 0, "total_tokens": 34057, "trace_id": "98fe0984-f8d6-4ee7-b73c-450ba22ba7e7", "type": "metrics"}
 2026-07-30 20:31:32 | INFO     | app.routers.messages     | SSE stream completed for session 19, message_id=62 trace_id=98fe0984-f8d6-4ee7-b73c-450ba22ba7e7
 2026-07-30 20:32:44 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-30 22:02:54 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-30 22:02:55 | INFO     | watchfiles.main          | 4 changes detected
+2026-07-30 22:02:55 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-30 22:02:55 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-30 22:03:47 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-30 22:03:47 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-30 22:03:47 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-30 22:03:47 | INFO     | watchfiles.main          | 4 changes detected
+2026-07-30 22:03:48 | INFO     | watchfiles.main          | 1 change detected
+2026-07-30 22:08:30 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-30 22:08:30 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-30 22:08:30 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-30 22:09:50 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-30 22:09:50 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-30 22:09:50 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-30 22:09:51 | INFO     | app.services.mcp_client  | MCP file client closed

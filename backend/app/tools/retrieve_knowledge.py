@@ -3,8 +3,6 @@ import logging
 from langchain_core.tools import tool
 
 from app.config import settings
-from app.services.hybrid_search import hybrid_search
-
 logger = logging.getLogger(__name__)
 
 
@@ -34,6 +32,9 @@ def hybrid_retrieve(query: str, top_k: int = 5) -> str:
     top_k = max(1, min(top_k, 10))
     logger.info("hybrid_retrieve called: query=%s, top_k=%d", query[:100], top_k)
     try:
+        # Lazy import keeps Agent graph startup independent from Chroma initialization.
+        from app.services.hybrid_search import hybrid_search
+
         results = hybrid_search(query, top_k=top_k)
     except Exception as e:
         logger.exception("hybrid_retrieve failed for query=%s", query[:100])

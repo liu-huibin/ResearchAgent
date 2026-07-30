@@ -17,5 +17,8 @@ def get_llm() -> ChatOpenAI:
         model=settings.llm_model_name,
         temperature=0.7,
         streaming=True,
+        # Ask OpenAI-compatible providers to include usage in the final stream
+        # chunk so Phase 5 can attribute tokens to individual agents.
+        stream_usage=True,
         **kwargs,
     )

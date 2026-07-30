@@ -15,6 +15,30 @@ class Settings(BaseSettings):
     agent_max_iterations: int = 10
     agent_timeout_seconds: int = 120
 
+    # Phase 5: MCP file tool. Relative paths are resolved from the backend cwd.
+    mcp_enabled: bool = True
+    mcp_document_root: str = "data/documents"
+    mcp_start_timeout_seconds: int = 15
+
+    # Phase 5: LangSmith is optional at runtime. When disabled or unconfigured,
+    # local metrics remain available and the chat workflow is unaffected.
+    langsmith_tracing: bool = False
+    langsmith_api_key: str = ""
+    langsmith_endpoint: str = "https://api.smith.langchain.com"
+    langsmith_project: str = "researchmate"
+
+    # Prompt bundles are versioned in app.prompts.registry. A/B assignment is
+    # deterministic per session, which makes experiments reproducible.
+    prompt_primary_variant: str = "phase4-v1"
+    prompt_experiment_variant: str = "phase5-concise-v1"
+    prompt_experiment_percentage: int = 0
+
+    # Local warning thresholds (observability remains useful without a remote
+    # monitoring stack).
+    monitor_iteration_warning: int = 8
+    monitor_tool_failure_rate_warning: float = 0.2
+    monitor_duration_warning_ms: int = 90000
+
     max_upload_size_mb: int = 50
     upload_dir: str = "data/uploads"
 

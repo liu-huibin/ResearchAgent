@@ -4,7 +4,7 @@ import WordViewer from './WordViewer';
 import TabBar from './TabBar';
 import { api } from '../../services/api';
 import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
-import type { Document, Session } from '../../types';
+import type { Session } from '../../types';
 
 interface DocumentViewerProps {
   sessionId: number | null;
@@ -13,14 +13,12 @@ interface DocumentViewerProps {
 
 export default function DocumentViewer({ sessionId, onCommitPending }: DocumentViewerProps) {
   const { tabs, activeTabId, openTab, closeTab, setActiveTab, closeAllTabs } = useDocumentTabs();
-  const [sessionDoc, setSessionDoc] = useState<Document | null>(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
 
   // Auto-open session document as tab when session changes; close all previous tabs
   useEffect(() => {
     if (!sessionId) {
-      setSessionDoc(null);
       closeAllTabs();
       return;
     }
@@ -28,7 +26,6 @@ export default function DocumentViewer({ sessionId, onCommitPending }: DocumentV
     setLoading(true);
     api.getSessionDocument(sessionId)
       .then((doc) => {
-        setSessionDoc(doc);
         if (doc) {
           const ext = doc.filename.split('.').pop()?.toLowerCase();
           openTab({
@@ -41,9 +38,9 @@ export default function DocumentViewer({ sessionId, onCommitPending }: DocumentV
           });
         }
       })
-      .catch(() => setSessionDoc(null))
+      .catch(() => undefined)
       .finally(() => setLoading(false));
-  }, [sessionId]);
+  }, [sessionId, closeAllTabs, openTab]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,7 +57,6 @@ export default function DocumentViewer({ sessionId, onCommitPending }: DocumentV
         realSessionId = real.id;
       }
       const uploaded = await api.uploadDocument(realSessionId, file);
-      setSessionDoc(uploaded);
       const ext = uploaded.filename.split('.').pop()?.toLowerCase();
       openTab({
         documentId: uploaded.id,
@@ -69,7 +65,7 @@ export default function DocumentViewer({ sessionId, onCommitPending }: DocumentV
         isPdf: ext === 'pdf',
         label: uploaded.filename.length > 20 ? uploaded.filename.slice(0, 20) + '...' : uploaded.filename,
       });
-    } catch (err) {
+    } catch {
       alert('上传失败');
     } finally {
       setUploading(false);

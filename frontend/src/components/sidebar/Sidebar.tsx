@@ -3,6 +3,7 @@ import KnowledgeBase from './KnowledgeBase';
 import type { Session, Document } from '../../types';
 
 interface UploadItem {
+  id: string;
   filename: string;
   progress: number;
 }

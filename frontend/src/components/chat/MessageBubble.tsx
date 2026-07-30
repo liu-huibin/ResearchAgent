@@ -3,14 +3,15 @@ import ThoughtProcess from './ThoughtProcess';
 import MarkdownRenderer from './MarkdownRenderer';
 import { api } from '../../services/api';
 import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
-import type { Message } from '../../types';
+import type { AgentName, Message } from '../../types';
 
 interface MessageBubbleProps {
   message: Message;
   isStreaming?: boolean;
+  activeAgent?: AgentName | null;
 }
 
-export default function MessageBubble({ message, isStreaming }: MessageBubbleProps) {
+export default function MessageBubble({ message, isStreaming, activeAgent }: MessageBubbleProps) {
   const { openTab } = useDocumentTabs();
 
   const handleCitationClick = (docId: number) => {
@@ -51,6 +52,7 @@ export default function MessageBubble({ message, isStreaming }: MessageBubblePro
         <ThoughtProcess
           thought={message.thought || ''}
           toolCalls={(message.tool_calls || []).map(tc => ({ ...tc, input: typeof tc.input === 'string' ? tc.input : JSON.stringify(tc.input) }))}
+          activeAgent={activeAgent}
         />
       )}
 

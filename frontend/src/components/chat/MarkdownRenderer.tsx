@@ -1,4 +1,4 @@
-import { type ReactNode, Fragment } from 'react';
+import { Fragment } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { api } from '../../services/api';

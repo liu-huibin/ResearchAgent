@@ -2,12 +2,13 @@ import MessageBubble from './MessageBubble';
 import MarkdownRenderer from './MarkdownRenderer';
 import { api } from '../../services/api';
 import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
-import type { Message } from '../../types';
+import type { AgentName, Message } from '../../types';
 
 interface StreamingMessage {
   thought: string;
   content: string;
-  toolCalls: { tool: string; input: string; output?: string }[];
+  toolCalls: { agent?: AgentName; tool: string; input: string; output?: string; is_error?: boolean }[];
+  activeAgent: AgentName | null;
   done: boolean;
 }
 
@@ -50,6 +51,7 @@ export default function MessageList({ messages, streaming, error }: MessageListP
                 created_at: '',
               }}
               isStreaming
+              activeAgent={streaming.activeAgent}
             />
           )}
           {streaming.content && (

@@ -16,19 +16,17 @@ export function useSessions() {
     try {
       const list = await api.listSessions();
       setSessions(list);
-      if (!activeId && list.length > 0) {
-        setActiveId(list[0].id);
-      }
+      setActiveId(current => current ?? list[0]?.id ?? null);
     } catch (err) {
       console.error('加载会话列表失败:', err);
     } finally {
       setLoading(false);
     }
-  }, [activeId]);
+  }, []);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const create = useCallback(() => {
     const tempId = makeTempId();

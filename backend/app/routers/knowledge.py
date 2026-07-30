@@ -73,7 +73,7 @@ async def upload_knowledge(
         session_id=None,
     )
     db.add(document)
-    await db.commit()
+    await db.flush()
     await db.refresh(document)
 
     try:
@@ -91,18 +91,45 @@ async def upload_knowledge(
                 add_to_bm25("knowledge_base", chunks)
             except Exception:
                 logger.warning("BM25 index build failed for knowledge upload, doc_id=%d", document.id, exc_info=True)
+        await db.commit()
         logger.info("Knowledge upload complete: doc_id=%d, chunks=%d", document.id, len(chunks))
     except HTTPException:
+        await _cleanup_failed_upload(db, document, file_path)
         raise
     except Exception as e:
         logger.exception("Document processing failed for knowledge upload: %s", file.filename)
-        await db.delete(document)
-        await db.commit()
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        await _cleanup_failed_upload(db, document, file_path)
         raise HTTPException(status_code=500, detail=f"文档处理失败: {str(e)}")
 
     return document
+
+
+async def _cleanup_failed_upload(
+    db: AsyncSession,
+    document: Document,
+    file_path: str,
+) -> None:
+    """Roll back database state and best-effort external indexes/files."""
+    await db.rollback()
+    if document.id is not None:
+        try:
+            delete_vectordb_doc(document.id)
+        except Exception:
+            logger.warning(
+                "Vectordb rollback failed: doc_id=%d",
+                document.id,
+                exc_info=True,
+            )
+        try:
+            remove_from_bm25("knowledge_base", document.id)
+        except Exception:
+            logger.warning(
+                "BM25 rollback failed: doc_id=%d",
+                document.id,
+                exc_info=True,
+            )
+    if os.path.exists(file_path):
+        os.remove(file_path)
 
 
 @router.delete("/{doc_id}", status_code=204)

@@ -3,6 +3,7 @@ import KnowledgeItem from './KnowledgeItem';
 import type { Document } from '../../types';
 
 interface UploadItem {
+  id: string;
   filename: string;
   progress: number;
 }
@@ -68,8 +69,8 @@ export default function KnowledgeBase({
             <div className="p-3 text-center text-gray-400 text-xs">暂无知识库文档</div>
           ) : (
             <>
-              {uploads.map((u, i) => (
-                <div key={`upload-${i}`} className="flex items-center gap-2 px-3 py-2 text-sm">
+              {uploads.map((u) => (
+                <div key={u.id} className="flex items-center gap-2 px-3 py-2 text-sm">
                   <span className="text-base">📄</span>
                   <span className="flex-1 text-xs text-gray-500 truncate">{u.filename}</span>
                   <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">

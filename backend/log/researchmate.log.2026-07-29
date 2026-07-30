@@ -1,0 +1,62 @@
+2026-07-29 17:29:03 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 17:29:05 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1622, path=data/bm25\knowledge_base.pkl
+2026-07-29 17:29:05 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 1622 chunks indexed
+2026-07-29 17:29:05 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 17:29:05 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-29 17:29:59 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 17:30:00 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1622, path=data/bm25\knowledge_base.pkl
+2026-07-29 17:30:00 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 1622 chunks indexed
+2026-07-29 17:30:00 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 17:30:00 | INFO     | app.routers.messages     | Message received: session_id=14, content_len=4
+2026-07-29 17:30:00 | INFO     | app.routers.messages     | SSE stream started for session 14 trace_id=e35ce165-38d2-4799-998e-199108037a15
+2026-07-29 17:30:00 | INFO     | app.routers.messages     | SSE stream completed for session 14, message_id=50 trace_id=e35ce165-38d2-4799-998e-199108037a15
+2026-07-29 17:30:00 | INFO     | app.routers.sessions     | Deleted session 14 and related data
+2026-07-29 17:30:00 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-29 17:30:23 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 17:30:25 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1622, path=data/bm25\knowledge_base.pkl
+2026-07-29 17:30:25 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 1622 chunks indexed
+2026-07-29 17:30:25 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 17:30:25 | INFO     | app.routers.messages     | Message received: session_id=15, content_len=4
+2026-07-29 17:30:25 | INFO     | app.routers.messages     | SSE stream started for session 15 trace_id=70279c45-8932-48e6-8b15-fdd0631f4c3c
+2026-07-29 17:30:25 | INFO     | app.routers.messages     | SSE stream completed for session 15, message_id=52 trace_id=70279c45-8932-48e6-8b15-fdd0631f4c3c
+2026-07-29 17:30:25 | INFO     | app.routers.sessions     | Deleted session 15 and related data
+2026-07-29 17:30:25 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-29 17:36:02 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 17:36:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1622, path=data/bm25\knowledge_base.pkl
+2026-07-29 17:36:04 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 1622 chunks indexed
+2026-07-29 17:36:04 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 17:36:04 | INFO     | app.routers.documents    | Session document upload: session=16, file=synthetic.docx, size=0.03MB
+2026-07-29 17:36:04 | INFO     | app.routers.messages     | Message received: session_id=16, content_len=57
+2026-07-29 17:36:04 | INFO     | app.routers.messages     | Extracting document text for session 16: doc_id=32
+2026-07-29 17:36:04 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\16\9607646af44248b490e88605a56a548a.docx, ext=.docx
+2026-07-29 17:36:04 | INFO     | app.services.file_parser | Text extracted: 102 chars (truncated from 102)
+2026-07-29 17:36:04 | INFO     | app.routers.messages     | SSE stream started for session 16 trace_id=1611d2cf-6168-4e78-adc6-69bfc089b7c5
+2026-07-29 17:36:04 | INFO     | app.services.agent       | Supervisor selected workflow=read_only
+2026-07-29 17:36:07 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 682, "llm_calls_failed": 0, "llm_latency_ms": 1088, "models": ["qwen-plus"], "output_tokens": 25, "total_tokens": 707}, "Supervisor": {"input_tokens": 147, "llm_calls_failed": 0, "llm_latency_ms": 1044, "models": ["qwen-plus"], "output_tokens": 36, "total_tokens": 183}}, "duration_ms": 2586, "input_tokens": 829, "iterations": 3, "langsmith_enabled": false, "output_tokens": 61, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 16, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 890, "trace_id": "1611d2cf-6168-4e78-adc6-69bfc089b7c5", "type": "metrics"}
+2026-07-29 17:36:07 | INFO     | app.routers.messages     | SSE stream completed for session 16, message_id=54 trace_id=1611d2cf-6168-4e78-adc6-69bfc089b7c5
+2026-07-29 17:36:07 | INFO     | app.routers.sessions     | Deleted session 16 and related data
+2026-07-29 17:36:07 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-29 17:37:40 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 17:37:42 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1622, path=data/bm25\knowledge_base.pkl
+2026-07-29 17:37:42 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 1622 chunks indexed
+2026-07-29 17:37:42 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 17:37:42 | INFO     | app.routers.messages     | Message received: session_id=17, content_len=20
+2026-07-29 17:37:42 | INFO     | app.routers.messages     | SSE stream started for session 17 trace_id=da6f8d3f-40b3-4d1c-a6d2-21fce18653d3
+2026-07-29 17:37:42 | ERROR    | app.routers.messages     | SSE error for session 17: synthetic failure
+2026-07-29 17:37:42 | INFO     | app.routers.messages     | SSE stream completed for session 17, message_id=56 trace_id=da6f8d3f-40b3-4d1c-a6d2-21fce18653d3
+2026-07-29 17:37:42 | INFO     | app.routers.sessions     | Deleted session 17 and related data
+2026-07-29 17:37:42 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-29 18:14:18 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-29 18:14:19 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-29 18:14:19 | INFO     | app.main                 | BM25 index synced: 1622 chunks indexed
+2026-07-29 18:14:19 | INFO     | app.routers.documents    | Session document upload: session=18, file=synthetic-regression.docx, size=0.04MB
+2026-07-29 18:14:19 | INFO     | app.routers.messages     | Message received: session_id=18, content_len=56
+2026-07-29 18:14:19 | INFO     | app.routers.messages     | Extracting document text for session 18: doc_id=33
+2026-07-29 18:14:19 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\18\eea9964ecaf04fb690445d49720796c9.docx, ext=.docx
+2026-07-29 18:14:19 | INFO     | app.services.file_parser | Text extracted: 224 chars (truncated from 224)
+2026-07-29 18:14:19 | INFO     | app.routers.messages     | SSE stream started for session 18 trace_id=ad44f087-9bb0-4641-b5a3-a50bb6cf3e56
+2026-07-29 18:14:19 | INFO     | app.services.agent       | Supervisor selected workflow=read_only
+2026-07-29 18:14:22 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 697, "llm_calls_failed": 0, "llm_latency_ms": 1162, "models": ["qwen-plus"], "output_tokens": 34, "total_tokens": 731}, "Supervisor": {"input_tokens": 154, "llm_calls_failed": 0, "llm_latency_ms": 1232, "models": ["qwen-plus"], "output_tokens": 37, "total_tokens": 191}}, "duration_ms": 2989, "input_tokens": 851, "iterations": 3, "langsmith_enabled": false, "output_tokens": 71, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 18, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 922, "trace_id": "ad44f087-9bb0-4641-b5a3-a50bb6cf3e56", "type": "metrics"}
+2026-07-29 18:14:22 | INFO     | app.routers.messages     | SSE stream completed for session 18, message_id=58 trace_id=ad44f087-9bb0-4641-b5a3-a50bb6cf3e56
+2026-07-29 18:14:22 | INFO     | app.routers.sessions     | Deleted session 18 and related data
+2026-07-29 18:14:22 | INFO     | app.services.mcp_client  | MCP file client closed

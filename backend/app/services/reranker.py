@@ -4,6 +4,12 @@ Uses embedding cosine similarity as the default rerank strategy.
 If rerank_model is configured, uses that cross-encoder model instead.
 """
 import logging
+import os
+
+# The local CrossEncoder path is intentionally PyTorch-only. Some Windows
+# Python installations expose a user-level Keras/TensorFlow that Transformers
+# otherwise auto-detects, even though this backend never uses it.
+os.environ.setdefault("USE_TF", "0")
 
 from app.config import settings
 from app.services.embedding import embed_query, embed_documents

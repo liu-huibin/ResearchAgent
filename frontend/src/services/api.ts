@@ -1,4 +1,4 @@
-import type { Session, Message, Document } from '../types';
+import type { Session, Message, Document, SessionMetrics } from '../types';
 
 const BASE = '/api';
 
@@ -37,6 +37,9 @@ export const api = {
   // Messages
   getMessages: (sessionId: number) =>
     request<Message[]>(`/sessions/${sessionId}/messages`),
+
+  getSessionMetrics: (sessionId: number) =>
+    request<SessionMetrics>(`/sessions/${sessionId}/metrics`),
 
   // Documents
   uploadDocument: (sessionId: number, file: File): Promise<Document> => {

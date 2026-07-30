@@ -37,27 +37,36 @@ export function useSSE() {
           const { done, value } = await reader.read();
           if (done) break;
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+          buffer = (buffer + decoder.decode(value, { stream: true }))
+            .replace(/\r\n/g, '\n');
 
-          let currentType = '';
-          let currentData = '';
+          let boundary = buffer.indexOf('\n\n');
+          while (boundary !== -1) {
+            const block = buffer.slice(0, boundary);
+            buffer = buffer.slice(boundary + 2);
+            let eventType = '';
+            const dataLines: string[] = [];
 
-          for (const line of lines) {
-            if (line.startsWith('event: ')) {
-              currentType = line.slice(7).trim();
-            } else if (line.startsWith('data: ')) {
-              currentData = line.slice(6);
-              try {
-                const parsed = JSON.parse(currentData);
-                yield { type: currentType as SSEMessageEvent['type'], ...parsed };
-              } catch {
-                // skip malformed
+            for (const line of block.split('\n')) {
+              if (line.startsWith('event:')) {
+                eventType = line.slice(6).trim();
+              } else if (line.startsWith('data:')) {
+                dataLines.push(line.slice(5).trimStart());
               }
-              currentType = '';
-              currentData = '';
             }
+
+            if (eventType && dataLines.length > 0) {
+              try {
+                const parsed = JSON.parse(dataLines.join('\n'));
+                yield {
+                  type: eventType as SSEMessageEvent['type'],
+                  ...parsed,
+                };
+              } catch {
+                // Ignore this malformed frame and continue with later events.
+              }
+            }
+            boundary = buffer.indexOf('\n\n');
           }
         }
       } finally {

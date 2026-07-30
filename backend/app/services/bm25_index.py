@@ -50,6 +50,13 @@ def build_index(name: str, chunks: list[dict]) -> None:
 
     Each chunk is a dict with 'content' and 'metadata' keys.
     """
+    if not chunks:
+        # BM25Okapi cannot be constructed with an empty corpus. Treat an empty
+        # rebuild as deletion so searches cannot use stale entries.
+        delete_index(name)
+        logger.info("BM25 index cleared: name=%s", name)
+        return
+
     os.makedirs(settings.bm25_persist_dir, exist_ok=True)
 
     tokenized = [_tokenize(c["content"]) for c in chunks]
@@ -67,6 +74,33 @@ def build_index(name: str, chunks: list[dict]) -> None:
 
     _INDEX_CACHE[name] = {"bm25": bm25, "metadatas": metadatas, "corpus": corpus}
     logger.info("BM25 index built: name=%s, chunks=%d, path=%s", name, len(chunks), path)
+
+
+def _persisted_index_count(name: str) -> int | None:
+    """Return a validated persisted chunk count without constructing BM25."""
+    cached = _INDEX_CACHE.get(name)
+    if cached is not None:
+        corpus = cached.get("corpus", [])
+        metadatas = cached.get("metadatas", [])
+        if len(corpus) == len(metadatas):
+            return len(corpus)
+        return None
+
+    path = _index_path(name)
+    if not os.path.exists(path):
+        return None
+
+    try:
+        with open(path, "rb") as f:
+            data = pickle.load(f)
+        tokenized = data.get("tokenized_corpus", [])
+        metadatas = data.get("metadatas", [])
+        corpus = data.get("corpus", [])
+        if len(tokenized) == len(metadatas) == len(corpus):
+            return len(corpus)
+    except (OSError, pickle.PickleError, EOFError, AttributeError, TypeError):
+        logger.warning("BM25 persisted index is unreadable: name=%s", name, exc_info=True)
+    return None
 
 
 def search_bm25(query: str, top_k: int = 20, name: str = "knowledge_base") -> list[dict]:
@@ -136,7 +170,7 @@ def remove_from_index(name: str, doc_id: int) -> None:
 
 
 def sync_from_chroma(collection_name: str = "knowledge_base") -> int:
-    """Rebuild the BM25 index from the Chroma vector DB.
+    """Synchronize the BM25 index from the Chroma vector DB when needed.
 
     Useful for first-time Phase 3 deployment with existing knowledge base docs,
     or for recovery if the BM25 index becomes out of sync.
@@ -146,8 +180,21 @@ def sync_from_chroma(collection_name: str = "knowledge_base") -> int:
     from app.services.vectordb import get_collection
 
     coll = get_collection()
-    if coll.count() == 0:
+    chroma_count = coll.count()
+    persisted_count = _persisted_index_count(collection_name)
+
+    if chroma_count == 0:
+        if persisted_count is not None:
+            delete_index(collection_name)
+            logger.info("BM25 index cleared because Chroma is empty")
         return 0
+
+    if persisted_count == chroma_count:
+        logger.info(
+            "BM25 sync skipped: index already has %d chunks",
+            chroma_count,
+        )
+        return chroma_count
 
     all_data = coll.get()
     if not all_data["ids"]:

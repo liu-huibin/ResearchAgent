@@ -2,7 +2,7 @@ import logging
 
 from langchain_openai import ChatOpenAI
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 

@@ -2,7 +2,7 @@ from sqlmodel import SQLModel
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from app.config import settings
+from app.core.config import settings
 # Import all table models before create_all so incremental Phase 5 tables are
 # registered even when their router has not been imported yet.
 from app import models as _models  # noqa: F401

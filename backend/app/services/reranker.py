@@ -11,7 +11,7 @@ import os
 # otherwise auto-detects, even though this backend never uses it.
 os.environ.setdefault("USE_TF", "0")
 
-from app.config import settings
+from app.core.config import settings
 from app.services.embedding import embed_query, embed_documents
 
 logger = logging.getLogger(__name__)

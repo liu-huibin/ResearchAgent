@@ -1,66 +1,91 @@
-2026-07-30 20:23:08 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-30 20:23:08 | INFO     | watchfiles.main          | 8 changes detected
-2026-07-30 20:23:08 | INFO     | watchfiles.main          | 1 change detected
-2026-07-30 20:23:09 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-30 20:23:09 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-30 20:23:09 | INFO     | watchfiles.main          | 4 changes detected
-2026-07-30 20:23:52 | INFO     | app.routers.documents    | Session document upload: session=19, file=KI-SL_An_Efficient_and_Secure_Knowledge_Index_Based_Swarm_Learning_Method_of_Data_Collaboration.pdf, size=1.91MB
-2026-07-30 20:23:52 | INFO     | watchfiles.main          | 2 changes detected
-2026-07-30 20:24:09 | INFO     | app.routers.messages     | Message received: session_id=19, content_len=12
-2026-07-30 20:24:09 | INFO     | app.routers.messages     | Extracting document text for session 19: doc_id=34
-2026-07-30 20:24:09 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\19\192bce5f080944b6a090232a2f3faf06.pdf, ext=.pdf
-2026-07-30 20:24:11 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 105315)
-2026-07-30 20:24:11 | INFO     | app.routers.messages     | SSE stream started for session 19 trace_id=8e2671f1-ae7b-4a2c-9219-616f7428f69c
-2026-07-30 20:24:11 | INFO     | app.services.agent       | Supervisor selected workflow=read_only
-2026-07-30 20:24:23 | INFO     | watchfiles.main          | 2 changes detected
-2026-07-30 20:24:45 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 4712, "llm_calls_failed": 0, "llm_latency_ms": 14852, "models": ["qwen-plus"], "output_tokens": 942, "total_tokens": 5654}, "Supervisor": {"input_tokens": 1059, "llm_calls_failed": 0, "llm_latency_ms": 18589, "models": ["qwen-plus"], "output_tokens": 1192, "total_tokens": 2251}}, "duration_ms": 34079, "input_tokens": 5771, "iterations": 3, "langsmith_enabled": false, "output_tokens": 2134, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 19, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 7905, "trace_id": "8e2671f1-ae7b-4a2c-9219-616f7428f69c", "type": "metrics"}
-2026-07-30 20:24:45 | INFO     | app.routers.messages     | SSE stream completed for session 19, message_id=60 trace_id=8e2671f1-ae7b-4a2c-9219-616f7428f69c
-2026-07-30 20:31:12 | INFO     | app.routers.messages     | Message received: session_id=19, content_len=15
-2026-07-30 20:31:12 | INFO     | app.routers.messages     | Extracting document text for session 19: doc_id=34
-2026-07-30 20:31:12 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\19\192bce5f080944b6a090232a2f3faf06.pdf, ext=.pdf
-2026-07-30 20:31:14 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 105315)
-2026-07-30 20:31:14 | INFO     | app.routers.messages     | SSE stream started for session 19 trace_id=98fe0984-f8d6-4ee7-b73c-450ba22ba7e7
-2026-07-30 20:31:14 | INFO     | app.services.agent       | Supervisor selected workflow=read_only
-2026-07-30 20:31:15 | INFO     | app.services.agent       | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'KI-SL swarm learning knowledge index blockchain differential privacy IoV', 'top_k': 5}
-2026-07-30 20:31:15 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=KI-SL swarm learning knowledge index blockchain differential privacy IoV, top_k=5
-2026-07-30 20:31:16 | INFO     | app.services.hybrid_search | Hybrid search: query=KI-SL swarm learning knowledge index blockchain differential privacy IoV, semantic=20, bm25=20, merged=34
-2026-07-30 20:31:17 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
-2026-07-30 20:31:17 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=KI-SL swarm learning knowledge index blockchain differential privacy IoV
-2026-07-30 20:31:17 | INFO     | app.services.agent       | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2885
-2026-07-30 20:31:19 | INFO     | app.services.agent       | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'swarm learning knowledge index blockchain IoV', 'top_k': 5}
-2026-07-30 20:31:19 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=swarm learning knowledge index blockchain IoV, top_k=5
-2026-07-30 20:31:19 | INFO     | app.services.hybrid_search | Hybrid search: query=swarm learning knowledge index blockchain IoV, semantic=20, bm25=20, merged=33
-2026-07-30 20:31:20 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
-2026-07-30 20:31:20 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=swarm learning knowledge index blockchain IoV
-2026-07-30 20:31:20 | INFO     | app.services.agent       | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2898
-2026-07-30 20:31:21 | INFO     | app.services.agent       | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'KI-SL swarm learning knowledge distillation blockchain IoV', 'top_k': 5}
-2026-07-30 20:31:21 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=KI-SL swarm learning knowledge distillation blockchain IoV, top_k=5
-2026-07-30 20:31:22 | INFO     | app.services.hybrid_search | Hybrid search: query=KI-SL swarm learning knowledge distillation blockchain IoV, semantic=20, bm25=20, merged=34
-2026-07-30 20:31:23 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
-2026-07-30 20:31:23 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=KI-SL swarm learning knowledge distillation blockchain IoV
-2026-07-30 20:31:23 | INFO     | app.services.agent       | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2868
-2026-07-30 20:31:24 | INFO     | app.services.agent       | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'swarm learning knowledge index hash encoding nearest-neighbor search', 'top_k': 5}
-2026-07-30 20:31:24 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=swarm learning knowledge index hash encoding nearest-neighbor search, top_k=5
-2026-07-30 20:31:25 | INFO     | app.services.hybrid_search | Hybrid search: query=swarm learning knowledge index hash encoding nearest-neighbor search, semantic=20, bm25=20, merged=38
-2026-07-30 20:31:26 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
-2026-07-30 20:31:26 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=swarm learning knowledge index hash encoding nearest-neighbor search
-2026-07-30 20:31:26 | INFO     | app.services.agent       | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2890
-2026-07-30 20:31:32 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 33546, "llm_calls_failed": 0, "llm_latency_ms": 5880, "models": ["qwen-plus"], "output_tokens": 187, "total_tokens": 33733}, "Supervisor": {"input_tokens": 132, "llm_calls_failed": 0, "llm_latency_ms": 3644, "models": ["qwen-plus"], "output_tokens": 192, "total_tokens": 324}}, "duration_ms": 18135, "input_tokens": 33678, "iterations": 3, "langsmith_enabled": false, "output_tokens": 379, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 19, "status": "completed", "tool_calls": 4, "tool_failures": 0, "total_tokens": 34057, "trace_id": "98fe0984-f8d6-4ee7-b73c-450ba22ba7e7", "type": "metrics"}
-2026-07-30 20:31:32 | INFO     | app.routers.messages     | SSE stream completed for session 19, message_id=62 trace_id=98fe0984-f8d6-4ee7-b73c-450ba22ba7e7
-2026-07-30 20:32:44 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-30 22:02:54 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-30 22:02:55 | INFO     | watchfiles.main          | 4 changes detected
-2026-07-30 22:02:55 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-30 22:02:55 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-30 22:03:47 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-30 22:03:47 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-30 22:03:47 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-30 22:03:47 | INFO     | watchfiles.main          | 4 changes detected
-2026-07-30 22:03:48 | INFO     | watchfiles.main          | 1 change detected
-2026-07-30 22:08:30 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-30 22:08:30 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-30 22:08:30 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-30 22:09:50 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-30 22:09:50 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-30 22:09:50 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-30 22:09:51 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:24:40 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-31 16:24:41 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-31 16:24:41 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-31 16:24:41 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpozc0q8iz\knowledge_base.pkl
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpozc0q8iz\knowledge_base.pkl
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpbha6o6he\knowledge_base.pkl
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp15o7chde\knowledge_base.pkl
+2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-07-31 16:26:04 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:26:04 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:26:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:26:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:26:04 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-07-31 16:26:04 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.266 seconds
+2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpt_r71rrm\documents tools=['read_file']
+2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
+2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:26:06 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmphsr32e1a\documents tools=['read_file']
+2026-07-31 16:26:06 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmphsr32e1a\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
+2026-07-31 16:26:06 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:26:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-07-31 16:26:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8f5s3k5d\knowledge_base.pkl
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8f5s3k5d\knowledge_base.pkl
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpqsucouux\knowledge_base.pkl
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpjwytes7p\knowledge_base.pkl
+2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-07-31 16:37:45 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:37:45 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:37:45 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:37:45 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:37:45 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-07-31 16:37:45 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.391 seconds
+2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpgc7g_qlx\documents tools=['read_file']
+2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
+2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:37:47 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmp7ewxhigc\documents tools=['read_file']
+2026-07-31 16:37:47 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp7ewxhigc\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
+2026-07-31 16:37:47 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:37:47 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-07-31 16:37:47 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmptix1ji_k\knowledge_base.pkl
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmptix1ji_k\knowledge_base.pkl
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp98ss2w6y\knowledge_base.pkl
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmps_mrr4mw\knowledge_base.pkl
+2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-07-31 16:39:51 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:39:51 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-07-31 16:39:51 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:39:51 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-07-31 16:39:51 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-07-31 16:39:51 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.187 seconds
+2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpebsvtrfq\documents tools=['read_file']
+2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
+2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:39:53 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpvwmzbko8\documents tools=['read_file']
+2026-07-31 16:39:53 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpvwmzbko8\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
+2026-07-31 16:39:53 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-07-31 16:39:53 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-07-31 16:39:53 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-07-31 20:14:54 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-07-31 20:14:55 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
+2026-07-31 20:14:55 | INFO     | app.main                 | BM25 index ready: 1622 chunks
+2026-07-31 20:16:03 | INFO     | app.services.knowledge.service | Knowledge upload: file=2022-PDGAN：基于生成对抗网络的钓鱼检测.pdf, size=5.99MB, md5=0336ac6d9ea65209b5d7ee007ee145e8
+2026-07-31 20:16:03 | INFO     | app.services.file_parser | Extracting text: path=data\uploads\1\knowledge\e69972a71f3642df993d5da2dd5a80ee.pdf, ext=.pdf
+2026-07-31 20:16:04 | INFO     | app.services.file_parser | Text extracted: 47805 chars (truncated from 47805)
+2026-07-31 20:16:04 | INFO     | app.services.chunking    | Chunking: file=2022-PDGAN：基于生成对抗网络的钓鱼检测.pdf, doc_id=35, text_len=47805, chunks=107
+2026-07-31 20:16:10 | INFO     | app.services.vectordb    | Vectordb indexed 107 chunks (doc_id=35)
+2026-07-31 20:16:12 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1729, path=data/bm25\knowledge_base.pkl
+2026-07-31 20:16:12 | INFO     | app.services.knowledge.service | Knowledge upload complete: doc_id=35, chunks=107
+2026-07-31 20:16:59 | INFO     | app.services.chat.service | Message received: session_id=13, content_len=69
+2026-07-31 20:16:59 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\13\83620f3f2e2f461599f0a5546d297f52.pdf, ext=.pdf
+2026-07-31 20:16:59 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 55086)
+2026-07-31 20:16:59 | INFO     | app.services.chat.stream | SSE stream started for session 13 trace_id=b85e1145-e0c8-4a28-b653-802e6bf5cd2d
+2026-07-31 20:16:59 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-07-31 20:17:00 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary, top_k=5
+2026-07-31 20:17:00 | INFO     | app.agents.runner        | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'PDGAN: Phishing Detection With Generative Adversarial Networks paper summary'}
+2026-07-31 20:17:01 | INFO     | app.services.hybrid_search | Hybrid search: query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary, semantic=20, bm25=20, merged=35
+2026-07-31 20:17:02 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
+2026-07-31 20:17:02 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary
+2026-07-31 20:17:02 | INFO     | app.agents.runner        | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2951
+2026-07-31 20:17:31 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 11423, "llm_calls_failed": 0, "llm_latency_ms": 10686, "models": ["qwen-plus"], "output_tokens": 625, "total_tokens": 12048}, "Supervisor": {"input_tokens": 720, "llm_calls_failed": 0, "llm_latency_ms": 18985, "models": ["qwen-plus"], "output_tokens": 1226, "total_tokens": 1946}}, "duration_ms": 31838, "input_tokens": 12143, "iterations": 3, "langsmith_enabled": false, "output_tokens": 1851, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 13, "status": "completed", "tool_calls": 1, "tool_failures": 0, "total_tokens": 13994, "trace_id": "b85e1145-e0c8-4a28-b653-802e6bf5cd2d", "type": "metrics"}
+2026-07-31 20:17:31 | INFO     | app.services.chat.stream | SSE stream completed for session 13, message_id=64 trace_id=b85e1145-e0c8-4a28-b653-802e6bf5cd2d
+2026-07-31 20:17:42 | INFO     | app.services.mcp_client  | MCP file client closed

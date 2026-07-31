@@ -13,6 +13,7 @@ import uvicorn
 PROJECT_ROOT = Path(__file__).resolve().parent
 BACKEND_ROOT = PROJECT_ROOT / "backend"
 APP_ROOT = BACKEND_ROOT / "app"
+APP_MODULE = "app.main:app"
 
 
 def parse_args() -> argparse.Namespace:
@@ -22,7 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-reload",
         action="store_true",
-        help="Disable automatic reload for a production-style smoke test",
+        help="Disable automatic reload for a single-process smoke test",
     )
     return parser.parse_args()
 
@@ -38,7 +39,7 @@ def main() -> None:
     sys.path.insert(0, str(BACKEND_ROOT))
 
     uvicorn.run(
-        "app.main:app",
+        APP_MODULE,
         host=args.host,
         port=args.port,
         reload=reload_enabled,

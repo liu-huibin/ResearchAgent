@@ -5,7 +5,7 @@ import pickle
 import jieba
 from rank_bm25 import BM25Okapi
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 

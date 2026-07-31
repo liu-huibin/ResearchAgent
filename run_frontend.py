@@ -17,6 +17,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Start the ResearchMate frontend")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=3000)
+    parser.add_argument(
+        "--backend-url",
+        default="http://127.0.0.1:8000",
+        help="Backend origin used by the Vite /api proxy",
+    )
     return parser.parse_args()
 
 
@@ -26,6 +31,9 @@ def main() -> int:
     npm = shutil.which(npm_name)
     if npm is None:
         raise RuntimeError(f"{npm_name} was not found on PATH")
+
+    env = os.environ.copy()
+    env["VITE_BACKEND_URL"] = args.backend_url.rstrip("/")
 
     try:
         return subprocess.call(
@@ -38,8 +46,10 @@ def main() -> int:
                 args.host,
                 "--port",
                 str(args.port),
+                "--strictPort",
             ],
             cwd=FRONTEND_ROOT,
+            env=env,
         )
     except KeyboardInterrupt:
         # Ctrl+C is a normal developer shutdown, not a startup failure.

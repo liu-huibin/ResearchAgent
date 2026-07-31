@@ -4,9 +4,9 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.logging_config import setup_logging
-from app.config import settings
-from app.database import engine, init_db
+from app.core.config import settings
+from app.core.database import engine, init_db
+from app.core.logging import setup_logging
 from app.routers import sessions, documents, messages, knowledge
 from app.services.mcp_client import mcp_file_client
 

@@ -5,7 +5,7 @@ from unittest.mock import patch
 from langchain_core.messages import AIMessage
 from langchain_core.outputs import ChatGeneration, LLMResult
 
-from app.config import settings
+from app.core.config import settings
 from app.prompts.registry import select_prompt_bundle
 from app.services.observability import WorkflowMetricsCallback, summarize_agent_usage
 

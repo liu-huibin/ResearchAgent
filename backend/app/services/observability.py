@@ -8,7 +8,7 @@ from typing import Any
 
 from langchain_core.callbacks import BaseCallbackHandler
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 

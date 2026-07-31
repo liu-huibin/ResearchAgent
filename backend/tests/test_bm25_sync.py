@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from app.config import settings
+from app.core.config import settings
 from app.services import bm25_index
 
 

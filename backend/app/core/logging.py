@@ -2,7 +2,7 @@ import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
 
-from app.config import settings
+from app.core.config import settings
 
 _logging_initialized = False
 

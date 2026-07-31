@@ -1,7 +1,7 @@
 """Hybrid search orchestrator combining semantic search + BM25 + rerank."""
 import logging
 
-from app.config import settings
+from app.core.config import settings
 from app.services.vectordb import search as semantic_search
 from app.services.bm25_index import search_bm25
 from app.services.embedding import embed_query

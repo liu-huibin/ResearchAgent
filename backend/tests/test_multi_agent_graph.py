@@ -3,7 +3,9 @@ from unittest.mock import patch
 
 from langchain_core.messages import AIMessage
 
-from app.services import agent as agent_service
+from app.agents import factory as agent_factory
+from app.agents import graph as agent_graph
+from app.agents import nodes as agent_nodes
 
 
 class FakeAgent:
@@ -27,54 +29,54 @@ class FakeLLM:
 
 class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
-        agent_service.build_multi_agent_graph.cache_clear()
-        agent_service._reader_agent.cache_clear()
-        agent_service._ideation_agent.cache_clear()
-        agent_service._reviewer_agent.cache_clear()
+        agent_graph.build_multi_agent_graph.cache_clear()
+        agent_factory._reader_agent.cache_clear()
+        agent_factory._ideation_agent.cache_clear()
+        agent_factory._reviewer_agent.cache_clear()
 
     def tearDown(self):
-        agent_service.build_multi_agent_graph.cache_clear()
-        agent_service._reader_agent.cache_clear()
-        agent_service._ideation_agent.cache_clear()
-        agent_service._reviewer_agent.cache_clear()
+        agent_graph.build_multi_agent_graph.cache_clear()
+        agent_factory._reader_agent.cache_clear()
+        agent_factory._ideation_agent.cache_clear()
+        agent_factory._reviewer_agent.cache_clear()
 
     async def test_agent_factory_uses_langgraph_compatible_prompt_argument(self):
         fake_llm = object()
         with (
-            patch.object(agent_service, "get_llm", return_value=fake_llm),
+            patch.object(agent_factory, "get_llm", return_value=fake_llm),
             patch.object(
-                agent_service,
+                agent_factory,
                 "create_react_agent",
                 return_value=object(),
             ) as create_agent,
         ):
-            agent_service._reader_agent()
+            agent_factory._reader_agent()
 
         kwargs = create_agent.call_args.kwargs
-        self.assertEqual(kwargs["state_modifier"], agent_service.READER_SYSTEM_PROMPT)
+        self.assertEqual(kwargs["state_modifier"], agent_factory.READER_SYSTEM_PROMPT)
         self.assertNotIn("prompt", kwargs)
 
     async def test_read_only_routes_directly_to_finalizer(self):
         fake_llm = FakeLLM()
         with (
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_reader_agent",
                 return_value=FakeAgent("论文方法总结"),
             ),
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_ideation_agent",
                 side_effect=AssertionError("read_only 不应调用 IdeationAgent"),
             ),
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_reviewer_agent",
                 side_effect=AssertionError("read_only 不应调用 ReviewerAgent"),
             ),
-            patch.object(agent_service, "get_llm", return_value=fake_llm),
+            patch.object(agent_nodes, "get_llm", return_value=fake_llm),
         ):
-            result = await agent_service.build_multi_agent_graph().ainvoke(
+            result = await agent_graph.build_multi_agent_graph().ainvoke(
                 {
                     "user_message": "总结这篇论文的方法",
                     "document_text": "论文正文",
@@ -93,23 +95,23 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
         fake_llm = FakeLLM()
         with (
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_reader_agent",
                 return_value=FakeAgent("ReaderAgent 论文总结"),
             ),
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_ideation_agent",
                 return_value=FakeAgent("三个候选改进思路"),
             ),
             patch.object(
-                agent_service,
+                agent_nodes,
                 "_reviewer_agent",
                 return_value=FakeAgent("审查结论：需修改\n补充对照实验"),
             ),
-            patch.object(agent_service, "get_llm", return_value=fake_llm),
+            patch.object(agent_nodes, "get_llm", return_value=fake_llm),
         ):
-            result = await agent_service.build_multi_agent_graph().ainvoke(
+            result = await agent_graph.build_multi_agent_graph().ainvoke(
                 {
                     "user_message": "阅读这篇论文并提出 3 个改进思路",
                     "document_text": "论文正文",
@@ -125,7 +127,6 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result["revision_output"], "修正后的三个科研思路")
         self.assertEqual(result["final_output"], "Supervisor 最终汇总")
         self.assertEqual(fake_llm.calls, 2)
-
 
 if __name__ == "__main__":
     unittest.main()

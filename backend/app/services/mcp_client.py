@@ -6,7 +6,7 @@ from contextlib import AsyncExitStack
 from pathlib import Path
 from typing import Any
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 DOCUMENT_ROOT_ENV = "RESEARCHMATE_MCP_DOCUMENT_ROOT"

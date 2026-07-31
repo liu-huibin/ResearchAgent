@@ -4,7 +4,7 @@ from typing import Optional
 import chromadb
 from chromadb.api import Collection
 
-from app.config import settings
+from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 

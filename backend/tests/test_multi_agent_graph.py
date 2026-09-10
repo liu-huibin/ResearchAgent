@@ -19,11 +19,22 @@ class FakeAgent:
 class FakeLLM:
     def __init__(self):
         self.calls = 0
+        self.inputs = []
 
     async def ainvoke(self, _messages, config=None):
         self.calls += 1
+        self.inputs.append(_messages)
         if config and config.get("metadata", {}).get("research_stage") == "revision":
-            return AIMessage(content="修正后的三个科研思路")
+            return AIMessage(content=(
+                "修正后的三个科研思路\n"
+                "<public_report>\n"
+                "结论：已按审查意见修正方案。\n"
+                "依据：ReviewerAgent 的修改要求。\n"
+                "取舍：删除无证据断言。\n"
+                "风险/不确定性：仍需实验验证。\n"
+                "下一步：提交 Supervisor 汇总。\n"
+                "</public_report>"
+            ))
         return AIMessage(content="Supervisor 最终汇总")
 
 
@@ -62,7 +73,16 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
             patch.object(
                 agent_nodes,
                 "_reader_agent",
-                return_value=FakeAgent("论文方法总结"),
+                return_value=FakeAgent(
+                    "论文方法总结 [citation:doc_7:chunk_3]\n"
+                    "<public_report>\n"
+                    "结论：论文采用对比学习。\n"
+                    "依据：方法章节。\n"
+                    "取舍：以正文为主。\n"
+                    "风险/不确定性：未报告外部验证。\n"
+                    "下一步：交由 Supervisor 汇总。\n"
+                    "</public_report>"
+                ),
             ),
             patch.object(
                 agent_nodes,
@@ -86,10 +106,21 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertEqual(result["workflow"], "read_only")
-        self.assertEqual(result["reader_output"], "论文方法总结")
+        self.assertEqual(
+            result["reader_output"],
+            "论文方法总结 [citation:doc_7:chunk_3]",
+        )
+        self.assertIn("结论：论文采用对比学习", result["reader_public_report"])
         self.assertNotIn("ideation_output", result)
         self.assertNotIn("review_output", result)
-        self.assertEqual(result["final_output"], "Supervisor 最终汇总")
+        self.assertEqual(
+            result["final_output"],
+            "Supervisor 最终汇总\n\n可定位来源：[citation:doc_7:chunk_3]",
+        )
+        self.assertIn(
+            "[citation:doc_7:chunk_3]",
+            fake_llm.inputs[-1][-1].content,
+        )
 
     async def test_research_cycle_reviews_and_revises_once(self):
         fake_llm = FakeLLM()
@@ -97,17 +128,32 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
             patch.object(
                 agent_nodes,
                 "_reader_agent",
-                return_value=FakeAgent("ReaderAgent 论文总结"),
+                return_value=FakeAgent(
+                    "ReaderAgent 论文总结\n"
+                    "<public_report>\n结论：已提取论文约束。\n依据：论文正文。\n"
+                    "取舍：排除无证据结论。\n风险/不确定性：样本有限。\n"
+                    "下一步：生成候选方案。\n</public_report>"
+                ),
             ),
             patch.object(
                 agent_nodes,
                 "_ideation_agent",
-                return_value=FakeAgent("三个候选改进思路"),
+                return_value=FakeAgent(
+                    "三个候选改进思路\n"
+                    "<public_report>\n结论：形成三个可验证方案。\n依据：ReaderAgent 约束。\n"
+                    "取舍：优先低风险方案。\n风险/不确定性：收益待验证。\n"
+                    "下一步：ReviewerAgent 复核。\n</public_report>"
+                ),
             ),
             patch.object(
                 agent_nodes,
                 "_reviewer_agent",
-                return_value=FakeAgent("审查结论：需修改\n补充对照实验"),
+                return_value=FakeAgent(
+                    "审查结论：需修改\n补充对照实验\n"
+                    "<public_report>\n结论：候选方案需要修改。\n依据：缺少对照实验。\n"
+                    "取舍：保留可证伪方案。\n风险/不确定性：效果证据不足。\n"
+                    "下一步：补充实验设计。\n</public_report>"
+                ),
             ),
             patch.object(agent_nodes, "get_llm", return_value=fake_llm),
         ):
@@ -122,11 +168,17 @@ class MultiAgentGraphTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(result["workflow"], "research_cycle")
         self.assertEqual(result["reader_output"], "ReaderAgent 论文总结")
+        self.assertIn("已提取论文约束", result["reader_public_report"])
         self.assertEqual(result["ideation_output"], "三个候选改进思路")
         self.assertIn("需修改", result["review_output"])
+        self.assertIn("需要修改", result["reviewer_public_report"])
         self.assertEqual(result["revision_output"], "修正后的三个科研思路")
+        self.assertIn("删除无证据断言", result["revision_public_report"])
         self.assertEqual(result["final_output"], "Supervisor 最终汇总")
         self.assertEqual(fake_llm.calls, 2)
+        finalizer_input = fake_llm.inputs[-1][-1].content
+        self.assertNotIn("<public_report>", finalizer_input)
+        self.assertNotIn("已提取论文约束", finalizer_input)
 
 if __name__ == "__main__":
     unittest.main()

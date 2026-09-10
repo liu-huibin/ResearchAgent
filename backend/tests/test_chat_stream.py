@@ -26,6 +26,15 @@ class FakeStreamDatabase:
     async def refresh(self, _value):
         return None
 
+    async def execute(self, _query):
+        class Result:
+            def scalar_one_or_none(self):
+                return None
+        return Result()
+
+    async def rollback(self):
+        pass
+
 
 class FakeSessionContext:
     def __init__(self, database):
@@ -39,7 +48,13 @@ class FakeSessionContext:
 
 
 async def successful_workflow(**_kwargs):
-    yield {"type": "agent", "agent": "ReaderAgent", "stage": "reader"}
+    yield {
+        "type": "agent",
+        "agent": "ReaderAgent",
+        "stage": "reader",
+        "detail": "private stage injection",
+    }
+    yield {"type": "thought", "agent": "ReaderAgent", "content": "private reasoning"}
     yield {
         "type": "action",
         "agent": "ReaderAgent",
@@ -52,6 +67,24 @@ async def successful_workflow(**_kwargs):
         "tool": "hybrid_retrieve",
         "output": "source",
         "is_error": False,
+    }
+    yield {
+        "type": "report",
+        "agent": "ReaderAgent",
+        "stage": "reader",
+        "content": "private raw report",
+    }
+    yield {
+        "type": "report",
+        "agent": "ReaderAgent",
+        "stage": "reader",
+        "content": (
+            "结论：已定位论文方法。\n"
+            "依据：正文方法章节。\n"
+            "取舍：优先采用原文证据。\n"
+            "风险/不确定性：实验设置仍需核查。\n"
+            "下一步：交由 Supervisor 汇总。"
+        ),
     }
     yield {"type": "token", "content": "答案"}
     yield {
@@ -84,17 +117,35 @@ class ChatStreamTests(unittest.IsolatedAsyncioTestCase):
         ]
         stream = "".join(chunks)
 
-        expected_order = ["agent", "action", "observation", "token", "metrics", "done"]
+        expected_order = [
+            "agent", "action", "observation", "report", "token", "metrics", "done"
+        ]
         offsets = [stream.index(f"event: {event}\n") for event in expected_order]
         self.assertEqual(offsets, sorted(offsets))
         self.assertIn('"content": "答案"', stream)
         self.assertIn('"total_tokens": 12', stream)
+        self.assertIn("当前依据：会话中没有可供分析的论文正文", stream)
+        self.assertIn("结论：已定位论文方法", stream)
+        self.assertNotIn("private reasoning", stream)
+        self.assertNotIn("private stage injection", stream)
+        self.assertNotIn("private raw report", stream)
+        self.assertNotIn("method", stream)
+        self.assertNotIn("source", stream)
         self.assertEqual(database.commits, 1)
 
         assistant = next(value for value in database.added if isinstance(value, Message))
         run = next(value for value in database.added if isinstance(value, WorkflowRun))
         self.assertEqual(assistant.content, "答案")
-        self.assertEqual(assistant.tool_calls[0]["output"], "source")
+        self.assertIsNone(assistant.thought)
+        stage = next(item for item in assistant.tool_calls if item["kind"] == "stage")
+        tool = next(item for item in assistant.tool_calls if item["kind"] == "tool")
+        self.assertEqual(stage["stage"], "reader")
+        self.assertEqual(stage["status"], "succeeded")
+        self.assertIn("知识库检索作为证据入口", stage["detail"])
+        self.assertIn("实验设置仍需核查", stage["report"])
+        self.assertEqual(tool["status"], "succeeded")
+        self.assertNotIn("input", tool)
+        self.assertNotIn("output", tool)
         self.assertEqual(run.assistant_message_id, 41)
         self.assertEqual(run.total_tokens, 12)
 

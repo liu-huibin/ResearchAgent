@@ -7,9 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.document import Document
 from app.models.session import Session
 from app.core.storage import (
+    PreparedUpload,
     compute_md5,
     remove_file,
     store_upload,
+    store_prepared_upload,
     validate_upload_extension,
     validate_upload_size,
 )
@@ -29,22 +31,28 @@ async def upload_session_document(
     db: AsyncSession,
     session_id: int,
     filename: str | None,
-    content: bytes,
+    content: bytes | PreparedUpload,
 ) -> Document:
     session = await db.get(Session, session_id)
     if not session:
         raise SessionNotFoundError("会话不存在")
 
-    extension = validate_upload_extension(filename)
-    size_mb = validate_upload_size(content)
-    file_md5 = compute_md5(content)
-    file_path = store_upload(
-        content,
-        extension,
-        "1",
-        "sessions",
-        str(session_id),
-    )
+    if isinstance(content, PreparedUpload):
+        extension = content.extension
+        size_mb = content.size_mb
+        file_md5 = content.file_md5
+        file_path = store_prepared_upload(content, "1", "sessions", str(session_id))
+    else:
+        extension = validate_upload_extension(filename)
+        size_mb = validate_upload_size(content)
+        file_md5 = compute_md5(content)
+        file_path = store_upload(
+            content,
+            extension,
+            "1",
+            "sessions",
+            str(session_id),
+        )
     logger.info(
         "Session document upload: session=%d, file=%s, size=%.2fMB",
         session_id,

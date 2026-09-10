@@ -20,7 +20,7 @@ mcp = FastMCP(
 def read_file(file_path: str) -> str:
     """Read text from a PDF, Word, Markdown, or text file under the MCP root."""
     document_root = os.environ.get(DOCUMENT_ROOT_ENV, "data/documents")
-    logger.info("MCP read_file request: path=%s", file_path)
+    logger.info("MCP read_file request received")
     return read_document_safely(file_path, document_root)
 
 

@@ -1,5 +1,6 @@
 """Types shared by the ResearchMate LangGraph workflow."""
 
+import operator
 from typing import Annotated, Literal, TypedDict
 
 AgentName = Literal[
@@ -19,10 +20,15 @@ class ResearchState(TypedDict, total=False):
     prompt_version: str
     workflow: str
     reader_output: str
+    reader_public_report: str
     ideation_output: str
+    ideation_public_report: str
     review_output: str
+    reviewer_public_report: str
     revision_output: str
+    revision_public_report: str
     final_output: str
+    citation_markers: Annotated[list[str], operator.add]
     iterations: Annotated[int, lambda current, update: current + update]
 
 

@@ -39,6 +39,8 @@ class FakeSession:
         return None
 
     async def execute(self, _statement):
+        if 'workflow_runs.status =' in str(_statement):
+            return FakeExecuteResult([])
         return FakeExecuteResult(self.execute_values)
 
 
@@ -58,6 +60,7 @@ class RouterContractTests(unittest.IsolatedAsyncioTestCase):
             ("POST", "/api/sessions/{session_id}/upload"),
             ("GET", "/api/sessions/{session_id}/document"),
             ("GET", "/api/documents/{document_id}/file"),
+            ("GET", "/api/documents/{document_id}/citations/{chunk_index}"),
             ("POST", "/api/sessions/{session_id}/messages"),
             ("GET", "/api/sessions/{session_id}/messages"),
             ("GET", "/api/sessions/{session_id}/metrics"),

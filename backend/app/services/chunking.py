@@ -13,17 +13,19 @@ def chunk_document(text: str, filename: str, doc_id: int) -> list[dict]:
         chunk_overlap=settings.chunk_overlap,
         separators=["\n\n", "\n", ".", "!", "?", ";", ",", " ", ""],
         length_function=len,
+        add_start_index=True,
     )
-    chunks = splitter.split_text(text)
-    logger.info("Chunking: file=%s, doc_id=%d, text_len=%d, chunks=%d", filename, doc_id, len(text), len(chunks))
+    chunks = splitter.create_documents([text])
+    logger.info("Chunking: doc_id=%d, text_len=%d, chunks=%d", doc_id, len(text), len(chunks))
     return [
         {
-            "content": chunk,
+            "content": chunk.page_content,
             "metadata": {
                 "document_id": doc_id,
                 "filename": filename,
                 "chunk_index": i,
                 "total_chunks": len(chunks),
+                "start_index": chunk.metadata["start_index"],
             },
         }
         for i, chunk in enumerate(chunks)

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import asyncio
+import ipaddress
 import os
 import sys
 from pathlib import Path
@@ -14,6 +16,21 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 BACKEND_ROOT = PROJECT_ROOT / "backend"
 APP_ROOT = BACKEND_ROOT / "app"
 APP_MODULE = "app.main:app"
+
+if sys.platform == "win32":
+    # aiomysql TLS is not compatible with the Proactor loop used by default
+    # on Windows. Set this at import time so uvicorn reload child processes
+    # inherit the compatible policy before creating their event loop.
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+
+def is_loopback_host(host: str) -> bool:
+    if host.lower() == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return False
 
 
 def parse_args() -> argparse.Namespace:
@@ -37,6 +54,13 @@ def main() -> None:
     # wrong .env file or creating a second data/log tree at repository root.
     os.chdir(BACKEND_ROOT)
     sys.path.insert(0, str(BACKEND_ROOT))
+
+    from app.core.config import settings
+
+    if not is_loopback_host(args.host) and not settings.api_token:
+        raise SystemExit(
+            "Refusing non-loopback bind without API_TOKEN (minimum 32 characters)."
+        )
 
     uvicorn.run(
         APP_MODULE,

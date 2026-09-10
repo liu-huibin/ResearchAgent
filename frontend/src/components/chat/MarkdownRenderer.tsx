@@ -1,31 +1,49 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { api } from '../../services/api';
 
-const CITATION_RE = /\[citation:doc_(\d+):chunk_(\d+)\]/g;
+// Historical model output sometimes dropped the square brackets. Treat both
+// forms as the same machine citation so already-saved messages stay clickable.
+const CITATION_RE = /\[?citation:doc_(\d+):chunk_(\d+)\]?/g;
 
-function CitationBadge({ docId, onClick }: { docId: number; onClick: (docId: number) => void }) {
+function CitationBadge({ docId, chunkIndex, onClick }: {
+  docId: number;
+  chunkIndex: number;
+  onClick: (docId: number, chunkIndex: number) => void | Promise<void>;
+}) {
+  const [loading, setLoading] = useState(false);
   return (
-    <span
+    <button type="button"
       className="inline-flex items-center px-1.5 py-0.5 mx-0.5 text-xs bg-blue-100 text-blue-700 rounded cursor-pointer hover:bg-blue-200 align-bottom"
-      onClick={(e) => { e.stopPropagation(); onClick(docId); }}
-      title="查看来源文档"
+      disabled={loading}
+      aria-busy={loading}
+      onClick={async (e) => {
+        e.stopPropagation();
+        if (loading) return;
+        setLoading(true);
+        try {
+          await onClick(docId, chunkIndex);
+        } finally {
+          setLoading(false);
+        }
+      }}
+      title={`定位来源文档 ${docId} · 分块 ${chunkIndex + 1}`}
     >
-      来源
-    </span>
+      {loading ? '定位中…' : '来源'}
+    </button>
   );
 }
 
 interface MarkdownRendererProps {
   content: string;
-  onCitationClick?: (docId: number) => void;
+  onCitationClick?: (docId: number, chunkIndex: number) => void | Promise<void>;
 }
 
 export default function MarkdownRenderer({ content, onCitationClick }: MarkdownRendererProps) {
-  const handleCitation = (docId: number) => {
+  const handleCitation = (docId: number, chunkIndex: number) => {
     if (onCitationClick) {
-      onCitationClick(docId);
+      return onCitationClick(docId, chunkIndex);
     } else {
       window.open(api.getDocumentFileUrl(docId), '_blank');
     }
@@ -33,7 +51,7 @@ export default function MarkdownRenderer({ content, onCitationClick }: MarkdownR
 
   // Split content by citation markers, render each text segment as markdown,
   // and insert citation badges between segments.
-  const segments: { type: 'text' | 'citation'; value: string; docId?: number }[] = [];
+  const segments: { type: 'text' | 'citation'; value: string; docId?: number; chunkIndex?: number }[] = [];
   let lastIndex = 0;
   let match: RegExpExecArray | null;
 
@@ -42,7 +60,7 @@ export default function MarkdownRenderer({ content, onCitationClick }: MarkdownR
     if (match.index > lastIndex) {
       segments.push({ type: 'text', value: content.slice(lastIndex, match.index) });
     }
-    segments.push({ type: 'citation', value: match[0], docId: parseInt(match[1], 10) });
+    segments.push({ type: 'citation', value: match[0], docId: parseInt(match[1], 10), chunkIndex: parseInt(match[2], 10) });
     lastIndex = match.index + match[0].length;
   }
   if (lastIndex < content.length) {
@@ -93,7 +111,7 @@ export default function MarkdownRenderer({ content, onCitationClick }: MarkdownR
     <div className={proseClasses}>
       {segments.map((seg, i) =>
         seg.type === 'citation' ? (
-          <CitationBadge key={`cite-${i}`} docId={seg.docId!} onClick={handleCitation} />
+          <CitationBadge key={`cite-${i}`} docId={seg.docId!} chunkIndex={seg.chunkIndex!} onClick={handleCitation} />
         ) : (
           <Fragment key={`text-${i}`}>{renderText(seg.value)}</Fragment>
         )

@@ -58,6 +58,17 @@ class RootLauncherTests(unittest.TestCase):
         self.assertEqual(call.call_args.kwargs["cwd"], run_frontend.FRONTEND_ROOT)
         self.assertNotEqual(env, os.environ)
 
+    def test_backend_launcher_refuses_remote_bind_without_token(self):
+        args = argparse.Namespace(host="0.0.0.0", port=8010, no_reload=True)
+        with (
+            patch.object(run_backend, "parse_args", return_value=args),
+            patch.object(run_backend.os, "chdir"),
+            patch.object(run_backend.sys, "path"),
+            patch("app.core.config.settings.api_token", ""),
+            self.assertRaises(SystemExit),
+        ):
+            run_backend.main()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from app.core.config import settings
+from app.core.subprocess_env import safe_subprocess_env
 
 logger = logging.getLogger(__name__)
 DOCUMENT_ROOT_ENV = "RESEARCHMATE_MCP_DOCUMENT_ROOT"
@@ -53,11 +54,11 @@ class MCPFileClient:
             root = self.document_root
             root.mkdir(parents=True, exist_ok=True)
             backend_root = Path(__file__).resolve().parents[2]
-            env = os.environ.copy()
-            env[DOCUMENT_ROOT_ENV] = str(root)
-            current_pythonpath = env.get("PYTHONPATH", "")
-            env["PYTHONPATH"] = os.pathsep.join(
-                part for part in (str(backend_root), current_pythonpath) if part
+            env = safe_subprocess_env(
+                {
+                    DOCUMENT_ROOT_ENV: str(root),
+                    "PYTHONPATH": str(backend_root),
+                }
             )
             params = StdioServerParameters(
                 command=sys.executable,
@@ -116,9 +117,9 @@ class MCPFileClient:
         ]
         output = "\n".join(texts)
         if result.isError:
-            logger.warning("MCP read_file failed: path=%s error=%s", file_path, output[:300])
+            logger.warning("MCP read_file failed")
             return f"读取文件失败: {output or 'MCP 工具调用失败'}"
-        logger.info("MCP read_file success: path=%s chars=%d", file_path, len(output))
+        logger.info("MCP read_file success: chars=%d", len(output))
         return output
 
 

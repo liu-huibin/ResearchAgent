@@ -1,15 +1,21 @@
-import type { Session, Message, Document, SessionMetrics } from '../types';
+import type { Session, Message, Document, SessionMetrics, CitationLocation } from '../types';
+import { apiHeaders, authorizedFetch, getApiToken } from './security';
 
 const BASE = '/api';
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${BASE}${url}`, {
-    headers: { 'Content-Type': 'application/json' },
+  const res = await authorizedFetch(`${BASE}${url}`, {
+    headers: apiHeaders({ 'Content-Type': 'application/json' }),
     ...options,
   });
   if (!res.ok) {
     const err = await res.text();
-    throw new Error(err || res.statusText);
+    let message = err || res.statusText;
+    try {
+      const parsed = JSON.parse(err) as { detail?: string };
+      message = parsed.detail || message;
+    } catch { /* non-JSON error body */ }
+    throw new Error(message);
   }
   if (res.status === 204) return undefined as T;
   return res.json();
@@ -42,10 +48,12 @@ export const api = {
     request<SessionMetrics>(`/sessions/${sessionId}/metrics`),
 
   // Documents
+  getCitation: (documentId: number, chunkIndex: number) =>
+    request<CitationLocation>(`/documents/${documentId}/citations/${chunkIndex}`),
   uploadDocument: (sessionId: number, file: File): Promise<Document> => {
     const formData = new FormData();
     formData.append('file', file);
-    return fetch(`${BASE}/sessions/${sessionId}/upload`, {
+    return authorizedFetch(`${BASE}/sessions/${sessionId}/upload`, {
       method: 'POST',
       body: formData,
     }).then((res) => {
@@ -92,15 +100,17 @@ export const api = {
       xhr.addEventListener('error', () => reject(new Error('网络错误')));
 
       xhr.open('POST', `${BASE}/knowledge/upload`);
+      const token = getApiToken();
+      if (token) xhr.setRequestHeader('X-ResearchMate-Token', token);
       xhr.send(formData);
     });
   },
 
   // SSE
   sendMessageStream: (sessionId: number, content: string) =>
-    fetch(`${BASE}/sessions/${sessionId}/messages`, {
+    authorizedFetch(`${BASE}/sessions/${sessionId}/messages`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: apiHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ content }),
     }),
 };

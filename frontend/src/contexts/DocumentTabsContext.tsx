@@ -22,7 +22,7 @@ export function DocumentTabsProvider({ children }: { children: ReactNode }) {
       setTabs((prev) => {
         const existing = prev.find((t) => t.id === tabId);
         if (existing) {
-          return prev;
+          return prev.map(t => t.id === tabId ? { ...t, ...tab, id: tabId } : t);
         }
         return [...prev, { ...tab, id: tabId }];
       });

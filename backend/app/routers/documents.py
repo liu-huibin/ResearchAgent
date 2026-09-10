@@ -1,4 +1,5 @@
 import os
+import asyncio
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
@@ -6,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session
 from app.schemas.document import DocumentResponse
+from app.schemas.citation import CitationResponse
 from app.services.documents.service import (
     DocumentNotFoundError,
     SessionNotFoundError,
@@ -14,12 +16,28 @@ from app.services.documents.service import (
     upload_session_document as save_session_document,
 )
 from app.core.storage import (
+    PreparedUpload,
     UploadValidationError,
-    compute_md5,
-    validate_upload_extension,
+    cleanup_prepared_upload,
+    prepare_upload,
 )
 
 router = APIRouter(prefix="/api", tags=["documents"])
+
+
+@router.get("/documents/{document_id}/citations/{chunk_index}", response_model=CitationResponse)
+async def get_citation(document_id: int, chunk_index: int,
+                       db: AsyncSession = Depends(get_session)):
+    from app.services.citations import resolve_citation
+    try:
+        document = await get_document(db, document_id)
+        return await asyncio.to_thread(resolve_citation, document, chunk_index)
+    except LookupError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="引用定位暂时不可用") from exc
 
 
 @router.post("/sessions/{session_id}/upload", response_model=DocumentResponse)
@@ -28,14 +46,16 @@ async def upload_session_document(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_session),
 ):
+    prepared: PreparedUpload | None = None
     try:
-        validate_upload_extension(file.filename)
-        content = await file.read()
-        return await save_session_document(db, session_id, file.filename, content)
+        prepared = await prepare_upload(file)
+        return await save_session_document(db, session_id, prepared.filename, prepared)
     except SessionNotFoundError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except UploadValidationError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    finally:
+        cleanup_prepared_upload(prepared)
 
 
 @router.get("/sessions/{session_id}/document", response_model=DocumentResponse | None)

@@ -1,0 +1,22 @@
+# Local credentials, generated KMS evidence, and logical backups.
+.env
+.secrets/
+.artifacts/
+backups/
+
+# Runtime data can contain uploaded papers, extracted text, vector/index
+# content, and user prompts. Existing tracked fixtures remain untouched, but
+# newly generated or uploaded data must never be staged accidentally.
+data/bm25/
+data/chroma/
+data/uploads/
+data/documents/*
+!data/documents/.gitkeep
+log/
+
+# Python runtime artifacts.
+__pycache__/
+*.py[cod]
+
+KMS_PREFLIGHT.md
+MYSQL_SECURITY.md

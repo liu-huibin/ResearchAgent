@@ -30,19 +30,19 @@ def hybrid_retrieve(query: str, top_k: int = 5) -> str:
         Formatted hybrid retrieval results with source citations.
     """
     top_k = max(1, min(top_k, 10))
-    logger.info("hybrid_retrieve called: query=%s, top_k=%d", query[:100], top_k)
+    logger.info("hybrid_retrieve called: query_len=%d, top_k=%d", len(query), top_k)
     try:
         # Lazy import keeps Agent graph startup independent from Chroma initialization.
         from app.services.hybrid_search import hybrid_search
 
         results = hybrid_search(query, top_k=top_k)
-    except Exception as e:
-        logger.exception("hybrid_retrieve failed for query=%s", query[:100])
-        return f"混合检索失败: {str(e)}"
+    except Exception:
+        logger.exception("hybrid_retrieve failed")
+        return "混合检索失败"
 
-    logger.info("hybrid_retrieve results: %d chunks found for query=%s", len(results), query[:100])
+    logger.info("hybrid_retrieve results: %d chunks found", len(results))
     if not results:
-        logger.warning("hybrid_retrieve: no results for query=%s", query[:100])
+        logger.warning("hybrid_retrieve returned no results")
         return f'知识库中未找到与"{query}"相关的内容。'
 
     parts = []

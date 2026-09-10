@@ -10,16 +10,18 @@ export interface Message {
   session_id: number;
   role: 'user' | 'assistant' | 'tool';
   content: string | null;
-  thought: string | null;
   tool_calls: ToolCall[] | null;
   created_at: string;
 }
 
 export interface ToolCall {
+  kind?: 'stage' | 'tool';
   agent?: AgentName;
-  tool: string;
-  input: string | Record<string, unknown>;
-  output?: string;
+  stage?: string;
+  detail?: string;
+  report?: string;
+  tool?: string;
+  status: 'running' | 'succeeded' | 'failed';
   is_error?: boolean;
 }
 
@@ -34,13 +36,13 @@ export interface Document {
 }
 
 export interface SSEMessageEvent {
-  type: 'agent' | 'thought' | 'action' | 'observation' | 'token' | 'metrics' | 'done' | 'error';
+  type: 'start' | 'agent' | 'report' | 'action' | 'observation' | 'token' | 'metrics' | 'done' | 'error';
+  persisted?: boolean;
   content?: string;
   agent?: AgentName;
   stage?: string;
+  detail?: string;
   tool?: string;
-  input?: string | Record<string, unknown>;
-  output?: string;
   is_error?: boolean;
   message_id?: number;
   trace_id?: string;
@@ -105,4 +107,25 @@ export interface DocumentTab {
   fileUrl: string;
   isPdf: boolean;
   label: string;
+  citation?: CitationLocation;
+  navigationKey?: number;
+}
+
+export interface CitationFragment {
+  unit: number;
+  unit_text: string;
+  start: number;
+  end: number;
+  text: string;
+  occurrence: number;
+}
+
+export interface CitationLocation {
+  document_id: number;
+  chunk_index: number;
+  filename: string;
+  file_type: 'pdf' | 'docx';
+  text: string;
+  status: 'exact' | 'ambiguous' | 'unavailable';
+  fragments: CitationFragment[];
 }

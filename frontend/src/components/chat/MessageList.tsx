@@ -1,13 +1,11 @@
 import MessageBubble from './MessageBubble';
 import MarkdownRenderer from './MarkdownRenderer';
-import { api } from '../../services/api';
-import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
-import type { AgentName, Message } from '../../types';
+import { useCitation } from '../../hooks/useCitation';
+import type { AgentName, Message, ToolCall } from '../../types';
 
 interface StreamingMessage {
-  thought: string;
   content: string;
-  toolCalls: { agent?: AgentName; tool: string; input: string; output?: string; is_error?: boolean }[];
+  toolCalls: ToolCall[];
   activeAgent: AgentName | null;
   done: boolean;
 }
@@ -19,17 +17,7 @@ interface MessageListProps {
 }
 
 export default function MessageList({ messages, streaming, error }: MessageListProps) {
-  const { openTab } = useDocumentTabs();
-
-  const handleCitationClick = (docId: number) => {
-    openTab({
-      documentId: docId,
-      filename: `文档 ${docId}`,
-      fileUrl: api.getDocumentFileUrl(docId),
-      isPdf: true,
-      label: `文档 ${docId}`,
-    });
-  };
+  const handleCitationClick = useCitation();
   return (
     <div className="px-3 py-2 space-y-3">
       {messages.map((msg) => (
@@ -39,14 +27,13 @@ export default function MessageList({ messages, streaming, error }: MessageListP
       {/* Streaming message */}
       {streaming && (
         <div className="flex flex-col gap-1">
-          {streaming.thought && (
+          {(streaming.toolCalls.length > 0 || streaming.activeAgent) && (
             <MessageBubble
               message={{
                 id: -1,
                 session_id: 0,
                 role: 'assistant',
                 content: null,
-                thought: streaming.thought,
                 tool_calls: streaming.toolCalls,
                 created_at: '',
               }}

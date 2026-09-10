@@ -13,27 +13,23 @@ from app.agents.factory import (
     invoke_config,
 )
 from app.agents.state import ResearchState
+from app.agents.progress import (
+    classify_workflow,
+    ensure_citation_fallback,
+    extract_citation_markers,
+    split_agent_output,
+)
 from app.prompts.registry import get_prompt_bundle
 from app.services.llm import get_llm
 
 logger = logging.getLogger(__name__)
 
 
-def classify_workflow(user_message: str) -> str:
-    """Select the minimum workflow needed for the user's intent."""
-    normalized = user_message.lower()
-    ideation_terms = (
-        "思路", "创新", "改进", "扩展", "方向", "方案", "idea",
-        "improve", "innovation", "extension", "future work",
+def _result_citations(result: dict) -> list[str]:
+    messages = result.get("messages", []) if isinstance(result, dict) else []
+    return extract_citation_markers(
+        *(getattr(message, "content", "") for message in messages)
     )
-    review_terms = (
-        "审查", "评审", "核查", "验证", "批判", "review", "verify", "critique",
-    )
-    if any(term in normalized for term in ideation_terms):
-        return "research_cycle"
-    if any(term in normalized for term in review_terms):
-        return "read_and_review"
-    return "read_only"
 
 
 async def supervisor_node(state: ResearchState) -> dict:
@@ -58,7 +54,13 @@ async def reader_node(state: ResearchState, config: RunnableConfig) -> dict:
         {"messages": [HumanMessage(content=prompt)]},
         config=invoke_config("ReaderAgent", "reader", config, state),
     )
-    return {"reader_output": extract_last_content(result), "iterations": 1}
+    output, report = split_agent_output(extract_last_content(result))
+    return {
+        "reader_output": output,
+        "reader_public_report": report,
+        "citation_markers": _result_citations(result),
+        "iterations": 1,
+    }
 
 
 async def ideation_node(state: ResearchState, config: RunnableConfig) -> dict:
@@ -72,7 +74,13 @@ async def ideation_node(state: ResearchState, config: RunnableConfig) -> dict:
         {"messages": [HumanMessage(content=prompt)]},
         config=invoke_config("IdeationAgent", "ideation", config, state),
     )
-    return {"ideation_output": extract_last_content(result), "iterations": 1}
+    output, report = split_agent_output(extract_last_content(result))
+    return {
+        "ideation_output": output,
+        "ideation_public_report": report,
+        "citation_markers": _result_citations(result),
+        "iterations": 1,
+    }
 
 
 async def reviewer_node(state: ResearchState, config: RunnableConfig) -> dict:
@@ -88,7 +96,13 @@ async def reviewer_node(state: ResearchState, config: RunnableConfig) -> dict:
         {"messages": [HumanMessage(content=prompt)]},
         config=invoke_config("ReviewerAgent", "reviewer", config, state),
     )
-    return {"review_output": extract_last_content(result), "iterations": 1}
+    output, report = split_agent_output(extract_last_content(result))
+    return {
+        "review_output": output,
+        "reviewer_public_report": report,
+        "citation_markers": _result_citations(result),
+        "iterations": 1,
+    }
 
 
 async def revision_node(state: ResearchState, config: RunnableConfig) -> dict:
@@ -103,10 +117,23 @@ async def revision_node(state: ResearchState, config: RunnableConfig) -> dict:
         [SystemMessage(content=prompts.revision), HumanMessage(content=prompt)],
         config=invoke_config("IdeationAgent", "revision", config, state),
     )
-    return {"revision_output": str(result.content), "iterations": 1}
+    output, report = split_agent_output(str(result.content))
+    return {
+        "revision_output": output,
+        "revision_public_report": report,
+        "citation_markers": extract_citation_markers(result.content),
+        "iterations": 1,
+    }
 
 
 async def finalize_node(state: ResearchState, config: RunnableConfig) -> dict:
+    citations = extract_citation_markers(
+        *state.get("citation_markers", []),
+        state.get("reader_output", ""),
+        state.get("ideation_output", ""),
+        state.get("review_output", ""),
+        state.get("revision_output", ""),
+    )
     material = (
         f"用户任务：{state['user_message']}\n\n"
         f"ReaderAgent：\n{state.get('reader_output', '')}\n\n"
@@ -114,12 +141,21 @@ async def finalize_node(state: ResearchState, config: RunnableConfig) -> dict:
         f"ReviewerAgent：\n{state.get('review_output', '')}\n\n"
         f"审查后修正版：\n{state.get('revision_output', '')}"
     )
+    if citations:
+        material += (
+            "\n\n可用的机器定位标记（引用相关事实时必须原样复制，不得改写为"
+            "章节号、文献序号或“来源 N”）：\n"
+            + " ".join(citations)
+        )
     prompts = get_prompt_bundle(state.get("prompt_variant", "phase4-v1"))
     result = await get_llm().ainvoke(
         [SystemMessage(content=prompts.finalizer), HumanMessage(content=material)],
         config=invoke_config("Supervisor", "finalize", config, state),
     )
-    return {"final_output": str(result.content), "iterations": 1}
+    return {
+        "final_output": ensure_citation_fallback(str(result.content), citations),
+        "iterations": 1,
+    }
 
 
 def after_reader(state: ResearchState) -> str:

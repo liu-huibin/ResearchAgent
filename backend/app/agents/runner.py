@@ -9,7 +9,8 @@ from collections.abc import AsyncIterator
 from langchain_core.runnables import RunnableConfig
 
 from app.agents.graph import build_multi_agent_graph
-from app.agents.state import AgentName, NODE_TO_AGENT
+from app.agents.progress import extract_citation_markers, sanitize_public_report
+from app.agents.state import NODE_TO_AGENT
 from app.core.config import settings
 from app.prompts.registry import select_prompt_bundle
 from app.services.observability import (
@@ -19,6 +20,13 @@ from app.services.observability import (
 )
 
 logger = logging.getLogger(__name__)
+
+_PUBLIC_REPORT_FIELD_BY_STAGE = {
+    "reader": "reader_public_report",
+    "ideation": "ideation_public_report",
+    "reviewer": "reviewer_public_report",
+    "revision": "revision_public_report",
+}
 
 
 async def run_multi_agent_workflow(
@@ -54,12 +62,9 @@ async def run_multi_agent_workflow(
     iterations = 0
     tool_calls = 0
     tool_failures = 0
-    partial_outputs: dict[AgentName, list[str]] = {
-        "Supervisor": [],
-        "ReaderAgent": [],
-        "IdeationAgent": [],
-        "ReviewerAgent": [],
-    }
+    reported_stages: set[str] = set()
+    final_streamed_parts: list[str] = []
+    final_correction_emitted = False
     try:
         async with asyncio.timeout(settings.agent_timeout_seconds):
             async for event in graph.astream_events(
@@ -93,36 +98,63 @@ async def run_multi_agent_workflow(
                         continue
                     content = getattr(chunk, "content", "")
                     if content:
-                        if agent_name:
-                            partial_outputs[agent_name].append(content)
                         if node == "finalize":
+                            final_streamed_parts.append(str(content))
                             yield {"type": "token", "content": content}
-                        elif agent_name:
-                            yield {
-                                "type": "thought",
-                                "content": content,
-                                "agent": agent_name,
-                            }
+                        # Intermediate model output is internal reasoning. Keep
+                        # it in memory only for partial-result recovery.
+                elif kind == "on_chain_end":
+                    report_field = _PUBLIC_REPORT_FIELD_BY_STAGE.get(node)
+                    output = event.get("data", {}).get("output")
+                    if (
+                        node == "finalize"
+                        and isinstance(output, dict)
+                        and not final_correction_emitted
+                    ):
+                        final_output = str(output.get("final_output", ""))
+                        streamed = "".join(final_streamed_parts)
+                        if final_output and final_output.startswith(streamed):
+                            correction = final_output[len(streamed):]
+                            if correction:
+                                yield {"type": "token", "content": correction}
+                        elif final_output and not extract_citation_markers(streamed):
+                            markers = extract_citation_markers(final_output)
+                            if markers:
+                                yield {
+                                    "type": "token",
+                                    "content": "\n\n可定位来源：" + " ".join(markers),
+                                }
+                        final_correction_emitted = True
+                    report = ""
+                    if report_field and isinstance(output, dict):
+                        report = sanitize_public_report(
+                            str(output.get(report_field, ""))
+                        )
+                    if report and node not in reported_stages:
+                        reported_stages.add(node)
+                        yield {
+                            "type": "report",
+                            "agent": agent_name or NODE_TO_AGENT[node],
+                            "stage": node,
+                            "content": report,
+                        }
                 elif kind == "on_tool_start":
                     tool_calls += 1
                     name = event.get("name", "unknown")
-                    input_data = event.get("data", {}).get("input", {})
                     logger.info(
-                        "Agent tool start: agent=%s tool=%s input=%s",
+                        "Agent tool start: agent=%s tool=%s",
                         agent_name,
                         name,
-                        str(input_data)[:200],
                     )
                     yield {
                         "type": "action",
                         "agent": agent_name or "ReaderAgent",
                         "tool": name,
-                        "input": input_data,
                     }
                 elif kind == "on_tool_end":
                     name = event.get("name", "unknown")
                     output = str(event.get("data", {}).get("output", ""))
-                    is_error = output.startswith("读取文件失败:") or "访问被拒绝" in output
+                    is_error = output.startswith(("读取文件失败:", "混合检索失败")) or "访问被拒绝" in output
                     if is_error:
                         tool_failures += 1
                     logger.info(
@@ -135,24 +167,20 @@ async def run_multi_agent_workflow(
                         "type": "observation",
                         "agent": agent_name or "ReaderAgent",
                         "tool": name,
-                        "output": output[:500] + ("..." if len(output) > 500 else ""),
                         "is_error": is_error,
                     }
                 elif kind == "on_tool_error":
                     tool_failures += 1
                     name = event.get("name", "unknown")
-                    error = str(event.get("data", {}).get("error", "工具调用失败"))
                     logger.warning(
-                        "Agent tool error: agent=%s tool=%s error=%s",
+                        "Agent tool error: agent=%s tool=%s",
                         agent_name,
                         name,
-                        error[:300],
                     )
                     yield {
                         "type": "observation",
                         "agent": agent_name or "ReaderAgent",
                         "tool": name,
-                        "output": error[:500],
                         "is_error": True,
                     }
     except TimeoutError:
@@ -162,16 +190,8 @@ async def run_multi_agent_workflow(
             settings.agent_timeout_seconds,
         )
         yield {
-            "type": "thought",
-            "agent": "Supervisor",
-            "content": "工作流达到超时上限，正在返回已生成的部分结果。",
-        }
-        yield {
             "type": "token",
-            "content": format_partial_result(
-                partial_outputs,
-                "工作流已达到时间上限，以下为当前可用的阶段性结果。",
-            ),
+            "content": "工作流已达到时间上限，请缩小问题范围后重试。",
         }
     except Exception as exc:
         logger.exception("Multi-agent workflow failed")
@@ -179,23 +199,12 @@ async def run_multi_agent_workflow(
         if "recursion" in str(exc).lower() or "recursion" in error_name:
             status = "iteration_limit"
             yield {
-                "type": "thought",
-                "agent": "Supervisor",
-                "content": (
-                    f"工作流达到最大迭代次数 {settings.agent_max_iterations}，"
-                    "已强制结束。"
-                ),
-            }
-            yield {
                 "type": "token",
-                "content": format_partial_result(
-                    partial_outputs,
-                    "工作流已达到迭代上限，以下为当前可用的阶段性结果。",
-                ),
+                "content": "工作流已达到迭代上限，请缩小问题范围后重试。",
             }
         else:
             status = "error"
-            yield {"type": "error", "content": f"Agent 执行出错: {exc}"}
+            yield {"type": "error", "content": "Agent 执行出错"}
 
     agent_usage = usage_callback.snapshot()
     totals = summarize_agent_usage(agent_usage)
@@ -225,15 +234,3 @@ async def run_reader_agent(
     """Backward-compatible alias retained for Phase 1-3 callers."""
     async for event in run_multi_agent_workflow(user_message, document_text):
         yield event
-
-
-def format_partial_result(
-    outputs: dict[AgentName, list[str]],
-    reason: str,
-) -> str:
-    sections = [f"\n\n> {reason}"]
-    for agent in ("ReaderAgent", "IdeationAgent", "ReviewerAgent"):
-        content = "".join(outputs[agent]).strip()
-        if content:
-            sections.append(f"\n\n### {agent}\n\n{content}")
-    return "".join(sections)

@@ -13,7 +13,12 @@ from app.services.knowledge.service import (
     remove_knowledge as delete_knowledge,
     upload_knowledge as ingest_knowledge,
 )
-from app.core.storage import UploadValidationError, validate_upload_extension
+from app.core.storage import (
+    PreparedUpload,
+    UploadValidationError,
+    cleanup_prepared_upload,
+    prepare_upload,
+)
 
 router = APIRouter(prefix="/api/knowledge", tags=["knowledge"])
 
@@ -23,16 +28,18 @@ async def upload_knowledge(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_session),
 ):
+    prepared: PreparedUpload | None = None
     try:
-        validate_upload_extension(file.filename)
-        content = await file.read()
-        return await ingest_knowledge(db, file.filename, content)
+        prepared = await prepare_upload(file)
+        return await ingest_knowledge(db, prepared.filename, prepared)
     except (UploadValidationError, EmptyDocumentError) as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except DuplicateKnowledgeError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except KnowledgeProcessingError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
+    finally:
+        cleanup_prepared_upload(prepared)
 
 
 @router.delete("/{doc_id}", status_code=204)

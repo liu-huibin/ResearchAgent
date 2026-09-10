@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import ThoughtProcess from './ThoughtProcess';
 import MarkdownRenderer from './MarkdownRenderer';
-import { api } from '../../services/api';
-import { useDocumentTabs } from '../../contexts/DocumentTabsContext';
+import { useCitation } from '../../hooks/useCitation';
 import type { AgentName, Message } from '../../types';
 
 interface MessageBubbleProps {
@@ -12,17 +11,7 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble({ message, isStreaming, activeAgent }: MessageBubbleProps) {
-  const { openTab } = useDocumentTabs();
-
-  const handleCitationClick = (docId: number) => {
-    openTab({
-      documentId: docId,
-      filename: `文档 ${docId}`,
-      fileUrl: api.getDocumentFileUrl(docId),
-      isPdf: true,
-      label: `文档 ${docId}`,
-    });
-  };
+  const handleCitationClick = useCitation();
   const [copied, setCopied] = useState(false);
 
   const isUser = message.role === 'user';
@@ -47,12 +36,12 @@ export default function MessageBubble({ message, isStreaming, activeAgent }: Mes
 
   return (
     <div className="flex flex-col gap-1">
-      {/* Thought process */}
-      {(message.thought || (isStreaming && message.tool_calls?.length)) && (
+      {/* Sanitized stage status and explicitly public Agent reports only. */}
+      {(message.tool_calls?.length || (isStreaming && activeAgent)) && (
         <ThoughtProcess
-          thought={message.thought || ''}
-          toolCalls={(message.tool_calls || []).map(tc => ({ ...tc, input: typeof tc.input === 'string' ? tc.input : JSON.stringify(tc.input) }))}
+          toolCalls={message.tool_calls || []}
           activeAgent={activeAgent}
+          onCitationClick={handleCitationClick}
         />
       )}
 

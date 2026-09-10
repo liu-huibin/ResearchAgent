@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import engine, init_db
 from app.core.logging import setup_logging
+from app.core.security import API_TOKEN_HEADER, ApiSecurityMiddleware
 from app.routers import sessions, documents, messages, knowledge
 from app.services.mcp_client import mcp_file_client
 
@@ -49,10 +50,16 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=list(settings.allowed_origins),
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", API_TOKEN_HEADER],
+    expose_headers=["X-Trace-ID"],
+)
+app.add_middleware(
+    ApiSecurityMiddleware,
+    allowed_origins=settings.allowed_origins,
+    api_token=settings.api_token,
 )
 
 app.include_router(sessions.router)

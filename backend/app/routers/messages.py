@@ -56,5 +56,6 @@ async def send_message(
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
+            "X-Trace-ID": context.trace_id,
         },
     )

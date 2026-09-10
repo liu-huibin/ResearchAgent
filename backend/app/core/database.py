@@ -7,7 +7,13 @@ from app.core.config import settings
 # registered even when their router has not been imported yet.
 from app import models as _models  # noqa: F401
 
-engine = create_async_engine(settings.database_url, echo=False, pool_size=10, max_overflow=20)
+engine = create_async_engine(
+    settings.database_url,
+    echo=False,
+    pool_size=10,
+    max_overflow=20,
+    connect_args=settings.database_connect_args,
+)
 
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

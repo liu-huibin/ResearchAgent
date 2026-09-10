@@ -81,7 +81,7 @@ class BM25SyncTests(unittest.TestCase):
     def test_empty_chroma_removes_stale_index(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             collection = FakeCollection([])
-            index_path = Path(temp_dir) / "knowledge_base.pkl"
+            index_path = Path(temp_dir) / "knowledge_base.json"
             with patch.object(settings, "bm25_persist_dir", temp_dir):
                 bm25_index.build_index("knowledge_base", [_chunk(1, 0)])
                 self.assertTrue(index_path.exists())

@@ -1,91 +1,423 @@
-2026-07-31 16:24:40 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-31 16:24:41 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-31 16:24:41 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-31 16:24:41 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpozc0q8iz\knowledge_base.pkl
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpozc0q8iz\knowledge_base.pkl
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpbha6o6he\knowledge_base.pkl
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp15o7chde\knowledge_base.pkl
-2026-07-31 16:26:04 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
-2026-07-31 16:26:04 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:26:04 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:26:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:26:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:26:04 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
-2026-07-31 16:26:04 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.266 seconds
-2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpt_r71rrm\documents tools=['read_file']
-2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
-2026-07-31 16:26:05 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:26:06 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmphsr32e1a\documents tools=['read_file']
-2026-07-31 16:26:06 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmphsr32e1a\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
-2026-07-31 16:26:06 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:26:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
-2026-07-31 16:26:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8f5s3k5d\knowledge_base.pkl
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8f5s3k5d\knowledge_base.pkl
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpqsucouux\knowledge_base.pkl
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpjwytes7p\knowledge_base.pkl
-2026-07-31 16:37:45 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
-2026-07-31 16:37:45 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:37:45 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:37:45 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:37:45 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:37:45 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
-2026-07-31 16:37:45 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.391 seconds
-2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpgc7g_qlx\documents tools=['read_file']
-2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
-2026-07-31 16:37:46 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:37:47 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmp7ewxhigc\documents tools=['read_file']
-2026-07-31 16:37:47 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp7ewxhigc\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
-2026-07-31 16:37:47 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:37:47 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
-2026-07-31 16:37:47 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmptix1ji_k\knowledge_base.pkl
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmptix1ji_k\knowledge_base.pkl
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp98ss2w6y\knowledge_base.pkl
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmps_mrr4mw\knowledge_base.pkl
-2026-07-31 16:39:51 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
-2026-07-31 16:39:51 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:39:51 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
-2026-07-31 16:39:51 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:39:51 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
-2026-07-31 16:39:51 | INFO     | app.services.knowledge.service | Knowledge upload: file=empty.pdf, size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
-2026-07-31 16:39:51 | WARNING  | asyncio                  | Executing <Task pending name='Task-22' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.187 seconds
-2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpebsvtrfq\documents tools=['read_file']
-2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP read_file success: path=paper.txt chars=35
-2026-07-31 16:39:52 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:39:53 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpvwmzbko8\documents tools=['read_file']
-2026-07-31 16:39:53 | WARNING  | app.services.mcp_client  | MCP read_file failed: path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpvwmzbko8\secret.txt error=Error executing tool read_file: 访问被拒绝：文件路径超出 MCP 文档根目录
-2026-07-31 16:39:53 | INFO     | app.services.mcp_client  | MCP file client closed
-2026-07-31 16:39:53 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
-2026-07-31 16:39:53 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
-2026-07-31 20:14:54 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
-2026-07-31 20:14:55 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1622 chunks
-2026-07-31 20:14:55 | INFO     | app.main                 | BM25 index ready: 1622 chunks
-2026-07-31 20:16:03 | INFO     | app.services.knowledge.service | Knowledge upload: file=2022-PDGAN：基于生成对抗网络的钓鱼检测.pdf, size=5.99MB, md5=0336ac6d9ea65209b5d7ee007ee145e8
-2026-07-31 20:16:03 | INFO     | app.services.file_parser | Extracting text: path=data\uploads\1\knowledge\e69972a71f3642df993d5da2dd5a80ee.pdf, ext=.pdf
-2026-07-31 20:16:04 | INFO     | app.services.file_parser | Text extracted: 47805 chars (truncated from 47805)
-2026-07-31 20:16:04 | INFO     | app.services.chunking    | Chunking: file=2022-PDGAN：基于生成对抗网络的钓鱼检测.pdf, doc_id=35, text_len=47805, chunks=107
-2026-07-31 20:16:10 | INFO     | app.services.vectordb    | Vectordb indexed 107 chunks (doc_id=35)
-2026-07-31 20:16:12 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1729, path=data/bm25\knowledge_base.pkl
-2026-07-31 20:16:12 | INFO     | app.services.knowledge.service | Knowledge upload complete: doc_id=35, chunks=107
-2026-07-31 20:16:59 | INFO     | app.services.chat.service | Message received: session_id=13, content_len=69
-2026-07-31 20:16:59 | INFO     | app.services.file_parser | Extracting text: path=data/uploads\1\sessions\13\83620f3f2e2f461599f0a5546d297f52.pdf, ext=.pdf
-2026-07-31 20:16:59 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 55086)
-2026-07-31 20:16:59 | INFO     | app.services.chat.stream | SSE stream started for session 13 trace_id=b85e1145-e0c8-4a28-b653-802e6bf5cd2d
-2026-07-31 20:16:59 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
-2026-07-31 20:17:00 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary, top_k=5
-2026-07-31 20:17:00 | INFO     | app.agents.runner        | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve input={'query': 'PDGAN: Phishing Detection With Generative Adversarial Networks paper summary'}
-2026-07-31 20:17:01 | INFO     | app.services.hybrid_search | Hybrid search: query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary, semantic=20, bm25=20, merged=35
-2026-07-31 20:17:02 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
-2026-07-31 20:17:02 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found for query=PDGAN: Phishing Detection With Generative Adversarial Networks paper summary
-2026-07-31 20:17:02 | INFO     | app.agents.runner        | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=2951
-2026-07-31 20:17:31 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 11423, "llm_calls_failed": 0, "llm_latency_ms": 10686, "models": ["qwen-plus"], "output_tokens": 625, "total_tokens": 12048}, "Supervisor": {"input_tokens": 720, "llm_calls_failed": 0, "llm_latency_ms": 18985, "models": ["qwen-plus"], "output_tokens": 1226, "total_tokens": 1946}}, "duration_ms": 31838, "input_tokens": 12143, "iterations": 3, "langsmith_enabled": false, "output_tokens": 1851, "prompt_variant": "phase4-v1", "prompt_version": "2026-06-18.1", "session_id": 13, "status": "completed", "tool_calls": 1, "tool_failures": 0, "total_tokens": 13994, "trace_id": "b85e1145-e0c8-4a28-b653-802e6bf5cd2d", "type": "metrics"}
-2026-07-31 20:17:31 | INFO     | app.services.chat.stream | SSE stream completed for session 13, message_id=64 trace_id=b85e1145-e0c8-4a28-b653-802e6bf5cd2d
-2026-07-31 20:17:42 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 10:07:11 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8k7e7il7\knowledge_base.json
+2026-09-09 10:07:11 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp8k7e7il7\knowledge_base.json
+2026-09-09 10:07:11 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-09-09 10:07:12 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpcq_hja4v\knowledge_base.json
+2026-09-09 10:07:12 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-09-09 10:07:12 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpy6tc7qgh\knowledge_base.json
+2026-09-09 10:07:12 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-09-09 10:07:12 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:12 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:07:12 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:12 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:12 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:12 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 201, in stream_chat
+    assistant_message = await persist()
+                        ^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 225, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 10:07:13 | ERROR    | app.services.chat.stream | Unable to save workflow trace_id=00000000-0000-0000-0000-000000000001
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 255, in stream_chat
+    await persist("error" if result.stream_error == "对话流处理失败" else "cancelled")
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 225, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | ERROR    | app.services.chat.stream | SSE error for session 1: Agent 执行出错
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=flush
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=flush
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=commit
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=commit
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=ack
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=3 trace_id=ack
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 10:07:13 | INFO     | app.services.chat.service | Message received: session_id=1, content_len=12
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:07:13 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 108, in stream_chat
+    async for event in events:
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 50, in _with_heartbeat
+    await pending
+RuntimeError: private
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 10:07:13 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 10:07:13 | INFO     | app.services.chunking    | Chunking: doc_id=7, text_len=3489, chunks=8
+2026-09-09 10:07:13 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 10:07:14 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 10:07:14 | INFO     | app.services.knowledge.service | Knowledge upload: size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-09-09 10:07:14 | WARNING  | asyncio                  | Executing <Task pending name='Task-135' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.703 seconds
+2026-09-09 10:07:16 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmp9fxn70hk\documents tools=['read_file']
+2026-09-09 10:07:16 | INFO     | app.services.mcp_client  | MCP read_file success: chars=35
+2026-09-09 10:07:16 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 10:07:17 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpi6b9z1pp\documents tools=['read_file']
+2026-09-09 10:07:17 | WARNING  | app.services.mcp_client  | MCP read_file failed
+2026-09-09 10:07:17 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 10:07:17 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-09-09 10:07:17 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-09-09 10:07:17 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 1, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "8bef3d3b-d67b-4757-bf8f-d723cb4a86c0", "type": "metrics"}
+2026-09-09 10:07:17 | INFO     | app.agents.runner        | Agent tool end: agent=None tool=hybrid_retrieve output_len=21
+2026-09-09 10:07:17 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 1, "total_tokens": 0, "trace_id": "a9c693e0-4421-4bf1-98b9-a6af3ea207b1", "type": "metrics"}
+2026-09-09 10:07:17 | WARNING  | app.agents.runner        | Multi-agent workflow timed out after 0 seconds
+2026-09-09 10:07:17 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 19, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "timeout", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "e0b2048b-1d03-48d1-8115-a79e0153970f", "type": "metrics"}
+2026-09-09 10:07:17 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 68, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 16, in astream_events
+    raise RuntimeError('recursion limit reached')
+RuntimeError: recursion limit reached
+2026-09-09 10:07:17 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "iteration_limit", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "af432487-5a61-45f7-b598-9e02f5e0743f", "type": "metrics"}
+2026-09-09 10:07:17 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 68, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 18, in astream_events
+    raise RuntimeError('private model failure')
+RuntimeError: private model failure
+2026-09-09 10:07:17 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "error", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "0cd8fa76-1bcf-43ec-b248-1518ab19e2a4", "type": "metrics"}
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpml2td7kq\knowledge_base.json
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpml2td7kq\knowledge_base.json
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp66ieqatq\knowledge_base.json
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpgxom09x3\knowledge_base.json
+2026-09-09 10:31:02 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-09-09 10:31:02 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:02 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:31:02 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:02 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:02 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:02 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 201, in stream_chat
+    assistant_message = await persist()
+                        ^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 225, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 10:31:03 | ERROR    | app.services.chat.stream | Unable to save workflow trace_id=00000000-0000-0000-0000-000000000001
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 255, in stream_chat
+    await persist("error" if result.stream_error == "对话流处理失败" else "cancelled")
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 225, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | ERROR    | app.services.chat.stream | SSE error for session 1: Agent 执行出错
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=flush
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=flush
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=commit
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=commit
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=ack
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=3 trace_id=ack
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 10:31:03 | INFO     | app.services.chat.service | Message received: session_id=1, content_len=12
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 10:31:03 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 108, in stream_chat
+    async for event in events:
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 50, in _with_heartbeat
+    await pending
+RuntimeError: private
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 10:31:03 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 10:31:03 | INFO     | app.services.chunking    | Chunking: doc_id=7, text_len=3489, chunks=8
+2026-09-09 10:31:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 10:31:04 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 10:31:04 | INFO     | app.services.knowledge.service | Knowledge upload: size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-09-09 10:31:04 | WARNING  | asyncio                  | Executing <Task pending name='Task-135' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.360 seconds
+2026-09-09 10:31:05 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmp_zm8p9vd\documents tools=['read_file']
+2026-09-09 10:31:05 | INFO     | app.services.mcp_client  | MCP read_file success: chars=35
+2026-09-09 10:31:05 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 10:31:06 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmpwna3qk3i\documents tools=['read_file']
+2026-09-09 10:31:06 | WARNING  | app.services.mcp_client  | MCP read_file failed
+2026-09-09 10:31:06 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 10:31:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-09-09 10:31:06 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-09-09 10:31:06 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 1, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "fff2aa6f-802f-49bf-a8dd-962cbe00c056", "type": "metrics"}
+2026-09-09 10:31:06 | INFO     | app.agents.runner        | Agent tool end: agent=None tool=hybrid_retrieve output_len=21
+2026-09-09 10:31:06 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 1, "total_tokens": 0, "trace_id": "8037ac22-6667-4270-9f74-67d34485aaac", "type": "metrics"}
+2026-09-09 10:31:06 | WARNING  | app.agents.runner        | Multi-agent workflow timed out after 0 seconds
+2026-09-09 10:31:06 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 19, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "timeout", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "58a7bea8-66eb-4f24-be30-eaf2409564de", "type": "metrics"}
+2026-09-09 10:31:06 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 68, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 16, in astream_events
+    raise RuntimeError('recursion limit reached')
+RuntimeError: recursion limit reached
+2026-09-09 10:31:06 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "iteration_limit", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "be503608-b941-4e4d-a0ad-92abb3556591", "type": "metrics"}
+2026-09-09 10:31:06 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 68, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 18, in astream_events
+    raise RuntimeError('private model failure')
+RuntimeError: private model failure
+2026-09-09 10:31:06 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": null, "status": "error", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "b22f7c14-6517-4e3c-9f0e-acc406d3bed0", "type": "metrics"}
+2026-09-09 14:20:03 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:20:04 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:20:04 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:21:50 | INFO     | app.services.chat.service | Message received: session_id=24, content_len=31
+2026-09-09 14:21:50 | INFO     | app.services.file_parser | Extracting text: ext=.pdf
+2026-09-09 14:21:51 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xc339b for key /Ascent
+2026-09-09 14:21:51 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xcb321 for key /Ascent
+2026-09-09 14:21:51 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xd6e08 for key /Ascent
+2026-09-09 14:21:51 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 20674)
+2026-09-09 14:21:51 | INFO     | app.services.chat.stream | SSE stream started for session 24 trace_id=6bb63bc7-7a87-4b61-a774-b9a648cb580d
+2026-09-09 14:21:51 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-09-09 14:22:32 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 11962, "llm_calls_failed": 0, "llm_latency_ms": 20515, "models": ["qwen-plus"], "output_tokens": 885, "total_tokens": 12847}, "Supervisor": {"input_tokens": 650, "llm_calls_failed": 0, "llm_latency_ms": 18980, "models": ["qwen-plus"], "output_tokens": 1063, "total_tokens": 1713}}, "duration_ms": 40239, "input_tokens": 12612, "iterations": 3, "langsmith_enabled": false, "output_tokens": 1948, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-08.2", "session_id": 24, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 14560, "trace_id": "6bb63bc7-7a87-4b61-a774-b9a648cb580d", "type": "metrics"}
+2026-09-09 14:22:32 | INFO     | app.services.chat.stream | SSE stream completed for session 24, message_id=82 trace_id=6bb63bc7-7a87-4b61-a774-b9a648cb580d
+2026-09-09 14:39:31 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:39:38 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:39:38 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:39:38 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:39:38 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:39:43 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:39:43 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:39:43 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:40:08 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:40:13 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:40:13 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:40:13 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:40:48 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:40:53 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:40:53 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:40:53 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:41:03 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:41:08 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:41:08 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:41:08 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:41:26 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:41:31 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:41:31 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:41:31 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:42:13 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:42:18 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:42:18 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:42:18 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:47:39 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:47:45 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:47:46 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:47:46 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:55:02 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:55:08 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:55:08 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:55:08 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 14:55:22 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 14:55:27 | INFO     | app.services.mcp_client  | MCP file client connected: root=D:\PythonProject\ResearchAgemt\backend\data\documents tools=['read_file']
+2026-09-09 14:55:27 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 1225 chunks
+2026-09-09 14:55:27 | INFO     | app.main                 | BM25 index ready: 1225 chunks
+2026-09-09 15:04:53 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x132785 for key /MediaBox
+2026-09-09 15:14:14 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpofoexkq7\knowledge_base.json
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmpofoexkq7\knowledge_base.json
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 sync from Chroma complete: 2 chunks indexed
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=1, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp3pehocgk\knowledge_base.json
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 index cleared because Chroma is empty
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 index built: name=knowledge_base, chunks=2, path=C:\Users\LIUHUI~1\AppData\Local\Temp\tmp_3q1zjr7\knowledge_base.json
+2026-09-09 15:14:15 | INFO     | app.services.bm25_index  | BM25 sync skipped: index already has 2 chunks
+2026-09-09 15:14:15 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:15 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 15:14:15 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:15 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:15 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:15 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 201, in stream_chat
+    assistant_message = await persist()
+                        ^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 242, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 15:14:16 | ERROR    | app.services.chat.stream | Unable to save workflow trace_id=00000000-0000-0000-0000-000000000001
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 255, in stream_chat
+    await persist("error" if result.stream_error == "对话流处理失败" else "cancelled")
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 87, in persist
+    message = await persist_workflow_result(db, context, result, status_override)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\service.py", line 242, in persist_workflow_result
+    await db.commit()
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 46, in commit
+    self.factory.fail('commit')
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_chat_reliability.py", line 68, in fail
+    raise RuntimeError('injected storage failure')
+RuntimeError: injected storage failure
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | ERROR    | app.services.chat.stream | SSE error for session 1: Agent 执行出错
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=flush
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=flush
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=commit
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=commit
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=ack
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=3 trace_id=ack
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 1, message_id=1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 2, message_id=2 trace_id=00000000-0000-0000-0000-000000000002
+2026-09-09 15:14:16 | INFO     | app.services.chat.service | Message received: session_id=1, content_len=12
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream cancelled for session 1
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 1 trace_id=00000000-0000-0000-0000-000000000001
+2026-09-09 15:14:16 | ERROR    | app.services.chat.stream | SSE stream failed for session 1
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 108, in stream_chat
+    async for event in events:
+  File "D:\PythonProject\ResearchAgemt\backend\app\services\chat\stream.py", line 50, in _with_heartbeat
+    await pending
+RuntimeError: private
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream started for session 7 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 15:14:16 | INFO     | app.services.chat.stream | SSE stream completed for session 7, message_id=41 trace_id=00000000-0000-0000-0000-000000000007
+2026-09-09 15:14:16 | INFO     | app.services.chunking    | Chunking: doc_id=7, text_len=18, chunks=1
+2026-09-09 15:14:16 | INFO     | app.services.chunking    | Chunking: doc_id=7, text_len=3489, chunks=8
+2026-09-09 15:14:17 | INFO     | app.services.file_parser | Extracting text: ext=.docx
+2026-09-09 15:14:17 | INFO     | app.services.file_parser | Text extracted: 23 chars (truncated from 23)
+2026-09-09 15:14:17 | INFO     | app.services.chunking    | Chunking: doc_id=8, text_len=23, chunks=1
+2026-09-09 15:14:17 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 15:14:17 | INFO     | app.services.documents.service | Session document upload: session=7, file=paper.pdf, size=0.00MB
+2026-09-09 15:14:17 | INFO     | app.services.knowledge.service | Knowledge upload: size=0.00MB, md5=ac232776f5a8aee2e1db8d8d9f735fd1
+2026-09-09 15:14:18 | WARNING  | asyncio                  | Executing <Task pending name='Task-141' coro=<MCPFileToolTests.test_server_discovers_and_reads_file_inside_root() running at D:\PythonProject\ResearchAgemt\backend\tests\test_mcp_file_tool.py:19> cb=[_run_until_complete_cb() at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\base_events.py:181] created at C:\Users\liuhuibin\.conda\envs\ResearchAgent\Lib\asyncio\runners.py:100> took 0.562 seconds
+2026-09-09 15:14:19 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmp8xq6z7tj\documents tools=['read_file']
+2026-09-09 15:14:19 | INFO     | app.services.mcp_client  | MCP read_file success: chars=35
+2026-09-09 15:14:19 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 15:14:20 | INFO     | app.services.mcp_client  | MCP file client connected: root=C:\Users\liuhuibin\AppData\Local\Temp\tmplamtz6ki\documents tools=['read_file']
+2026-09-09 15:14:20 | WARNING  | app.services.mcp_client  | MCP read_file failed
+2026-09-09 15:14:20 | INFO     | app.services.mcp_client  | MCP file client closed
+2026-09-09 15:14:20 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-09-09 15:14:20 | INFO     | app.agents.nodes         | Supervisor selected workflow=research_cycle
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 1, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "8e0349b9-2904-4c03-8ceb-2b0254cf490c", "type": "metrics"}
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 1, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "a20a8a36-0723-49ea-86ac-fc5033bcf99c", "type": "metrics"}
+2026-09-09 15:14:20 | INFO     | app.agents.runner        | Agent tool end: agent=None tool=hybrid_retrieve output_len=21
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "completed", "tool_calls": 0, "tool_failures": 1, "total_tokens": 0, "trace_id": "0fc85266-ab85-4291-bece-71e9fc919887", "type": "metrics"}
+2026-09-09 15:14:20 | WARNING  | app.agents.runner        | Multi-agent workflow timed out after 0 seconds
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 23, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "timeout", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "efdf38e9-f2cd-4fb7-aa70-01c434378d1b", "type": "metrics"}
+2026-09-09 15:14:20 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 70, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 17, in astream_events
+    raise RuntimeError('recursion limit reached')
+RuntimeError: recursion limit reached
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "iteration_limit", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "00234608-acbe-4c39-8b02-f8bb3073862f", "type": "metrics"}
+2026-09-09 15:14:20 | ERROR    | app.agents.runner        | Multi-agent workflow failed
+Traceback (most recent call last):
+  File "D:\PythonProject\ResearchAgemt\backend\app\agents\runner.py", line 70, in run_multi_agent_workflow
+    async for event in graph.astream_events(
+  File "D:\PythonProject\ResearchAgemt\backend\tests\test_runner_limits.py", line 19, in astream_events
+    raise RuntimeError('private model failure')
+RuntimeError: private model failure
+2026-09-09 15:14:20 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {}, "duration_ms": 0, "input_tokens": 0, "iterations": 0, "langsmith_enabled": false, "output_tokens": 0, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": null, "status": "error", "tool_calls": 0, "tool_failures": 0, "total_tokens": 0, "trace_id": "ef4d5bf2-e125-4f1e-bb7d-09a927030c26", "type": "metrics"}
+2026-09-09 15:17:20 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x132785 for key /MediaBox
+2026-09-09 15:17:21 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x132785 for key /MediaBox
+2026-09-09 15:18:06 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x132785 for key /MediaBox
+2026-09-09 15:25:32 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x132785 for key /MediaBox
+2026-09-09 15:26:45 | INFO     | app.services.chat.service | Message received: session_id=24, content_len=30
+2026-09-09 15:26:45 | INFO     | app.services.file_parser | Extracting text: ext=.pdf
+2026-09-09 15:26:45 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xc339b for key /Ascent
+2026-09-09 15:26:45 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xcb321 for key /Ascent
+2026-09-09 15:26:45 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xd6e08 for key /Ascent
+2026-09-09 15:26:45 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 20674)
+2026-09-09 15:26:45 | INFO     | app.services.chunking    | Chunking: doc_id=36, text_len=20017, chunks=48
+2026-09-09 15:26:45 | INFO     | app.services.chat.stream | SSE stream started for session 24 trace_id=5842c80e-cd48-411a-8ed8-cdac6c5d47af
+2026-09-09 15:26:46 | INFO     | app.agents.nodes         | Supervisor selected workflow=read_only
+2026-09-09 15:26:48 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve called: query_len=29, top_k=5
+2026-09-09 15:26:48 | INFO     | app.agents.runner        | Agent tool start: agent=ReaderAgent tool=hybrid_retrieve
+2026-09-09 15:26:49 | INFO     | app.services.hybrid_search | Hybrid search: semantic=20, bm25=20, merged=29
+2026-09-09 15:26:50 | INFO     | app.services.hybrid_search | Hybrid search final: 5 results after rerank
+2026-09-09 15:26:50 | INFO     | app.tools.retrieve_knowledge | hybrid_retrieve results: 5 chunks found
+2026-09-09 15:26:50 | INFO     | app.agents.runner        | Agent tool end: agent=ReaderAgent tool=hybrid_retrieve output_len=3044
+2026-09-09 15:26:53 | INFO     | app.agents.runner        | Agent tool start: agent=ReaderAgent tool=read_file
+2026-09-09 15:26:53 | WARNING  | app.services.mcp_client  | MCP read_file failed
+2026-09-09 15:26:53 | INFO     | app.agents.runner        | Agent tool end: agent=ReaderAgent tool=read_file output_len=115
+2026-09-09 15:27:22 | INFO     | app.services.observability | workflow_metrics {"agent_usage": {"ReaderAgent": {"input_tokens": 43718, "llm_calls_failed": 0, "llm_latency_ms": 23345, "models": ["qwen-plus"], "output_tokens": 913, "total_tokens": 44631}, "Supervisor": {"input_tokens": 1393, "llm_calls_failed": 0, "llm_latency_ms": 10133, "models": ["qwen-plus"], "output_tokens": 642, "total_tokens": 2035}}, "duration_ms": 36627, "input_tokens": 45111, "iterations": 3, "langsmith_enabled": false, "output_tokens": 1555, "prompt_variant": "phase4-v1", "prompt_version": "2026-09-09.1", "session_id": 24, "status": "completed", "tool_calls": 2, "tool_failures": 0, "total_tokens": 46666, "trace_id": "5842c80e-cd48-411a-8ed8-cdac6c5d47af", "type": "metrics"}
+2026-09-09 15:27:22 | INFO     | app.services.chat.stream | SSE stream completed for session 24, message_id=84 trace_id=5842c80e-cd48-411a-8ed8-cdac6c5d47af
+2026-09-09 15:27:33 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x6abe2 for key /Ascent
+2026-09-09 15:27:33 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x812e9 for key /Ascent
+2026-09-09 15:27:33 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x8f933 for key /Ascent
+2026-09-09 15:27:33 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x9dbda for key /Ascent
+2026-09-09 15:27:44 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x6abe2 for key /Ascent
+2026-09-09 15:27:44 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x812e9 for key /Ascent
+2026-09-09 15:27:44 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x8f933 for key /Ascent
+2026-09-09 15:27:44 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x9dbda for key /Ascent
+2026-09-09 15:28:13 | INFO     | app.services.file_parser | Extracting text: ext=.pdf
+2026-09-09 15:28:13 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xc339b for key /Ascent
+2026-09-09 15:28:14 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xcb321 for key /Ascent
+2026-09-09 15:28:14 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xd6e08 for key /Ascent
+2026-09-09 15:28:14 | INFO     | app.services.file_parser | Text extracted: 20017 chars (truncated from 20674)
+2026-09-09 15:28:14 | INFO     | app.services.chunking    | Chunking: doc_id=36, text_len=20017, chunks=48
+2026-09-09 15:28:14 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xc339b for key /Ascent
+2026-09-09 15:28:15 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xcb321 for key /Ascent
+2026-09-09 15:28:15 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0xd6e08 for key /Ascent
+2026-09-09 15:32:09 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x6abe2 for key /Ascent
+2026-09-09 15:32:09 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x812e9 for key /Ascent
+2026-09-09 15:32:09 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x8f933 for key /Ascent
+2026-09-09 15:32:09 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x9dbda for key /Ascent
+2026-09-09 15:32:13 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x6abe2 for key /Ascent
+2026-09-09 15:32:13 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x812e9 for key /Ascent
+2026-09-09 15:32:14 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x8f933 for key /Ascent
+2026-09-09 15:32:14 | WARNING  | PyPDF2.generic._data_structures | Multiple definitions in dictionary at byte 0x9dbda for key /Ascent

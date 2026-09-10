@@ -3,7 +3,7 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { useSSE } from '../../hooks/useSSE';
 import { api } from '../../services/api';
-import type { AgentName, Message, Session, SessionMetrics } from '../../types';
+import type { AgentName, Message, Session, SessionMetrics, ToolCall } from '../../types';
 
 interface LiveMetrics {
   status: string;
@@ -16,9 +16,8 @@ interface LiveMetrics {
 }
 
 interface StreamingMessage {
-  thought: string;
   content: string;
-  toolCalls: { agent?: AgentName; tool: string; input: string; output?: string; is_error?: boolean }[];
+  toolCalls: ToolCall[];
   activeAgent: AgentName | null;
   metrics: LiveMetrics | null;
   done: boolean;
@@ -38,12 +37,27 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
   const [error, setError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { stream, abort } = useSSE();
+  const currentSession = useRef(sessionId);
+  useEffect(() => { currentSession.current = sessionId; }, [sessionId]);
+  const sending = useRef<number | null>(null);
+  const generation = useRef(0);
+  useEffect(() => () => { generation.current++; abort(); }, [abort]);
 
   // Load message history
   useEffect(() => {
-    if (!sessionId) {
+    let stale = false;
+    if (sending.current !== null && (
+      sending.current === sessionId || (sending.current < 0 && sessionId !== null && sessionId > 0)
+    )) return;
+    generation.current++;
+    abort();
+    sending.current = null;
+    setStreaming(null);
+    setError('');
+    if (!sessionId || sessionId < 0) {
       setMessages([]);
       setSessionMetrics(null);
+      setLoading(false);
       return;
     }
     setLoading(true);
@@ -52,15 +66,18 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
       api.getSessionMetrics(sessionId).catch(() => null),
     ])
       .then(([history, metrics]) => {
+        if (stale) return;
         setMessages(history);
         setSessionMetrics(metrics);
       })
       .catch(() => {
+        if (stale) return;
         setMessages([]);
         setSessionMetrics(null);
       })
-      .finally(() => setLoading(false));
-  }, [sessionId]);
+      .finally(() => { if (!stale) setLoading(false); });
+    return () => { stale = true; };
+  }, [sessionId, abort]);
 
   // Auto scroll
   useEffect(() => {
@@ -69,18 +86,31 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
 
   const handleSend = useCallback(
     async (content: string) => {
-      if (!sessionId || !content.trim()) return;
+      if (!sessionId || !content.trim() || sending.current !== null || loading || streaming) return;
+      sending.current = sessionId;
+      const requestGeneration = ++generation.current;
+      const active = () => generation.current === requestGeneration;
       setError('');
 
       // Commit pending session on first message
       let realSessionId = sessionId;
       if (sessionId < 0) {
-        const real = await onCommitPending(sessionId);
+        let real: Session | undefined;
+        try { real = await onCommitPending(sessionId); } catch { /* handled below */ }
+        if (!active()) return;
         if (!real) {
           setError('创建会话失败');
+          sending.current = null;
+          return;
+        }
+        const selected = currentSession.current;
+        if (selected !== sessionId && selected !== real.id) {
+          generation.current++;
+          sending.current = null;
           return;
         }
         realSessionId = real.id;
+        sending.current = realSessionId;
       }
 
       // Add user message optimistically
@@ -89,7 +119,6 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
         session_id: realSessionId,
         role: 'user',
         content,
-        thought: null,
         tool_calls: null,
         created_at: new Date().toISOString(),
       };
@@ -97,7 +126,6 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
 
       // Start streaming
       const sMsg: StreamingMessage = {
-        thought: '',
         content: '',
         toolCalls: [],
         activeAgent: null,
@@ -105,36 +133,63 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
         done: false,
       };
       setStreaming(sMsg);
+      let traceId: string | undefined;
+      let savedMessageId: number | undefined;
+      let terminalStatus = '';
+      const finishStage = (status: 'succeeded' | 'failed') => {
+        const stage = [...sMsg.toolCalls].reverse().find(
+          item => item.kind === 'stage' && item.status === 'running'
+        );
+        if (stage) stage.status = status;
+      };
 
       try {
         for await (const event of stream(realSessionId, content)) {
+          if (!active() || (currentSession.current !== realSessionId && currentSession.current !== sessionId)) break;
+          if (event.trace_id) traceId = event.trace_id;
           switch (event.type) {
             case 'agent':
+              finishStage('succeeded');
               sMsg.activeAgent = event.agent || null;
-              if (event.agent) sMsg.thought += `\n[${event.agent}]\n`;
+              sMsg.toolCalls.push({
+                kind: 'stage',
+                agent: event.agent,
+                stage: event.stage || 'unknown',
+                detail: event.detail,
+                status: 'running',
+              });
               setStreaming({ ...sMsg });
               break;
-            case 'thought':
-              sMsg.thought += event.content || '';
+            case 'report': {
+              const stage = [...sMsg.toolCalls].reverse().find(
+                item => item.kind === 'stage'
+                  && item.agent === event.agent
+                  && item.stage === event.stage
+              );
+              if (stage && event.content) {
+                stage.report = event.content;
+                stage.status = 'succeeded';
+              }
               setStreaming({ ...sMsg });
               break;
+            }
             case 'action':
               sMsg.toolCalls.push({
+                kind: 'tool',
                 agent: event.agent,
                 tool: event.tool || 'unknown',
-                input: typeof event.input === 'string'
-                  ? event.input
-                  : JSON.stringify(event.input || {}),
+                status: 'running',
               });
               setStreaming({ ...sMsg });
               break;
             case 'observation': {
               const toolCall = [...sMsg.toolCalls].reverse().find(
-                tc => tc.tool === event.tool
+                  tc => (tc.kind ?? 'tool') === 'tool'
+                  && tc.tool === event.tool
                   && tc.agent === event.agent
-                  && tc.output === undefined
+                  && tc.status === 'running'
               );
-              if (toolCall) toolCall.output = event.output || '';
+              if (toolCall) toolCall.status = event.is_error ? 'failed' : 'succeeded';
               if (toolCall) toolCall.is_error = event.is_error;
               setStreaming({ ...sMsg });
               break;
@@ -144,6 +199,8 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
               setStreaming({ ...sMsg });
               break;
             case 'metrics':
+              finishStage(event.status === 'completed' ? 'succeeded' : 'failed');
+              sMsg.activeAgent = null;
               sMsg.metrics = {
                 status: event.status || 'completed',
                 promptVariant: event.prompt_variant || 'phase4-v1',
@@ -156,36 +213,63 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
               setStreaming({ ...sMsg });
               break;
             case 'error':
+              finishStage('failed');
+              sMsg.activeAgent = null;
               setError(event.content || '发生错误');
-              sMsg.done = true;
               setStreaming({ ...sMsg });
               break;
             case 'done':
-              sMsg.done = true;
+              finishStage(event.status === 'completed' ? 'succeeded' : 'failed');
+              sMsg.activeAgent = null;
+              savedMessageId = event.message_id;
+              terminalStatus = event.status || '';
               setStreaming({ ...sMsg });
               break;
           }
         }
       } catch (err: unknown) {
+        if (!active()) return;
         const msg = err instanceof Error ? err.message : '发送失败';
-        setError(msg);
+        setError(err instanceof DOMException && err.name === 'AbortError' ? '已停止，正在确认保存状态' : msg);
       }
 
       // Load real messages from server
-      try {
+      for (let attempt = 0; attempt < 6 && active(); attempt++) {
+       try {
         const [msgs, metrics] = await Promise.all([
           api.getMessages(realSessionId),
           api.getSessionMetrics(realSessionId),
         ]);
+        if (!active()) return;
+        const run = metrics.runs.find(r => r.trace_id === traceId && r.status !== 'running');
+        const confirmedId = savedMessageId ?? run?.assistant_message_id;
+        if (!confirmedId || !msgs.some(m => m.id === confirmedId)) {
+          await new Promise(resolve => setTimeout(resolve, 500 * (attempt + 1)));
+          continue;
+        }
         setMessages(msgs);
         setSessionMetrics(metrics);
-      } catch {
+        setStreaming(null);
+        const status = run?.status || terminalStatus;
+        setError(status && status !== 'completed' ? `本轮已结束并保存（${status}）` : '');
+        sending.current = null;
+        onSessionUpdate();
+        return;
+       } catch {
         // keep optimistic
+        await new Promise(resolve => setTimeout(resolve, 500));
+       }
       }
-      setStreaming(null);
-      onSessionUpdate();
+      if (active()) {
+        sMsg.done = true;
+        sMsg.activeAgent = null;
+        sMsg.toolCalls.forEach(t => { if (t.status === 'running') t.status = 'failed'; });
+        setStreaming({ ...sMsg });
+        setError('尚未确认保存。当前回答已保留，请复制备份或重新打开会话确认；不要重复发送。');
+        sending.current = null;
+      }
     },
-    [sessionId, stream, onSessionUpdate, onCommitPending]
+    [sessionId, stream, onSessionUpdate, onCommitPending, loading, streaming]
   );
 
   if (!sessionId) {
@@ -211,6 +295,9 @@ export default function ChatPanel({ sessionId, onSessionUpdate, onCommitPending 
             </span>
             <span className="mx-1.5 text-gray-300">|</span>
             会话 {(sessionMetrics?.total_tokens ?? 0).toLocaleString()}
+            {sessionMetrics?.latest_run?.status && sessionMetrics.latest_run.status !== 'completed' && (
+              <span className="ml-2 text-amber-700">{sessionMetrics.latest_run.status === 'running' ? '执行中（已保存检查点）' : sessionMetrics.latest_run.status}</span>
+            )}
           </div>
         ) : (
           <span className="text-[11px] text-gray-400">Token 统计将在对话后显示</span>
